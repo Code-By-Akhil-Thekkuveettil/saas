@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        REGISTRY = 'your-docker-registry'  // e.g., docker.io or registry.example.com
-        IMAGE_NAME = 'your-repo/your-image-name' // e.g., your DockerHub username/repo or custom repo
+        REGISTRY = 'docker.io'  // e.g., docker.io or registry.example.com
+        IMAGE_NAME = 'akhiltofficial/saas' // e.g., your DockerHub username/repo or custom repo
         VERSION = "${BUILD_NUMBER}" // Use Jenkins build number as version
     }
 
