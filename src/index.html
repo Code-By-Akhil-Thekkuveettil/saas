@@ -1,12 +1,159 @@
- <!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>Page Title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .calculator {
+            display: inline-block;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"] {
+            width: 200px;
+            height: 40px;
+            font-size: 18px;
+            margin-bottom: 10px;
+            text-align: right;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 45px;
+            height: 45px;
+            font-size: 18px;
+            margin: 5px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .operator {
+            background-color: #28a745;
+        }
+        .operator:hover {
+            background-color: #1e7e34;
+        }
+        .clear {
+            background-color: #dc3545;
+        }
+        .clear:hover {
+            background-color: #bd2130;
+        }
+    </style>
 </head>
 <body>
 
-<h1>This is a Heading</h1>
-<p>This is a paragraph.</p>
+<div class="calculator">
+    <input type="text" id="display" disabled>
+    <br>
+    <button onclick="appendNumber('7')">7</button>
+    <button onclick="appendNumber('8')">8</button>
+    <button onclick="appendNumber('9')">9</button>
+    <button class="operator" onclick="setOperator('/')">÷</button>
+    <br>
+    <button onclick="appendNumber('4')">4</button>
+    <button onclick="appendNumber('5')">5</button>
+    <button onclick="appendNumber('6')">6</button>
+    <button class="operator" onclick="setOperator('*')">×</button>
+    <br>
+    <button onclick="appendNumber('1')">1</button>
+    <button onclick="appendNumber('2')">2</button>
+    <button onclick="appendNumber('3')">3</button>
+    <button class="operator" onclick="setOperator('-')">−</button>
+    <br>
+    <button onclick="appendNumber('0')">0</button>
+    <button onclick="appendDecimal()">.</button>
+    <button onclick="calculate()">=</button>
+    <button class="operator" onclick="setOperator('+')">+</button>
+    <br>
+    <button class="clear" onclick="clearDisplay()">C</button>
+</div>
+
+<script>
+    let currentInput = '';
+    let operator = '';
+    let previousInput = '';
+
+    function appendNumber(number) {
+        currentInput += number;
+        updateDisplay(currentInput);
+    }
+
+    function appendDecimal() {
+        if (!currentInput.includes('.')) {
+            currentInput += '.';
+            updateDisplay(currentInput);
+        }
+    }
+
+    function setOperator(op) {
+        if (currentInput === '' && previousInput !== '') {
+            operator = op;
+            return;
+        }
+        if (previousInput !== '' && currentInput !== '') {
+            calculate();
+        }
+        operator = op;
+        previousInput = currentInput;
+        currentInput = '';
+    }
+
+    function calculate() {
+        if (previousInput === '' || currentInput === '' || operator === '') return;
+        const prev = parseFloat(previousInput);
+        const curr = parseFloat(currentInput);
+        let result;
+        switch (operator) {
+            case '+':
+                result = prev + curr;
+                break;
+            case '-':
+                result = prev - curr;
+                break;
+            case '*':
+                result = prev * curr;
+                break;
+            case '/':
+                result = prev / curr;
+                break;
+            default:
+                return;
+        }
+        currentInput = result.toString();
+        operator = '';
+        previousInput = '';
+        updateDisplay(currentInput);
+    }
+
+    function clearDisplay() {
+        currentInput = '';
+        previousInput = '';
+        operator = '';
+        updateDisplay('');
+    }
+
+    function updateDisplay(value) {
+        document.getElementById('display').value = value;
+    }
+</script>
 
 </body>
-</html> 
+</html>
