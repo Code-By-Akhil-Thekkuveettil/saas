@@ -5,6 +5,10 @@ pipeline {
         REGISTRY = 'docker.io'  // e.g., docker.io or registry.example.com
         IMAGE_NAME = 'akhiltofficial/saas' // e.g., your DockerHub username/repo or custom repo
         VERSION = "${BUILD_NUMBER}" // Use Jenkins build number as version
+        REPO_URL = 'https://github.com/Code-By-Akhil-Thekkuveettil/practice.git'
+        DEPLOYMENT_FILE_PATH = 'kubernetes/minikube/Deployment.yml'
+    }
+
     }
 
     stages {
@@ -35,7 +39,22 @@ pipeline {
                 }
             }
         }
+       stage('Update Deployment YAML') {
+            steps {
+                script {
+                    // Replace the image in the Deployment.yml file
+                    sh """
+                    git clone ${REPO_URL} repo
+                    cd repo
+                    sed -i 's|image: .*|image: ${REGISTRY}/${IMAGE_NAME}:${VERSION}|' ${DEPLOYMENT_FILE_PATH}
+                    git config user.name "Jenkins CI"
+                    git config user.email "jenkins@example.com"
+                    git add ${DEPLOYMENT_FILE_PATH}
+                    git commit -m "Update image to ${REGISTRY}/${IMAGE_NAME}:${VERSION}"
+                    git push origin main
+                    """
+                }
+            }
+        }
     }
-
-
 }
