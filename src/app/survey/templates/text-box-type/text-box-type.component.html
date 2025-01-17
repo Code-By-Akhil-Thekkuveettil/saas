@@ -1,0 +1,22 @@
+<div class="form-group row">
+    <div class="col-sm-3 col-form-label text-dark">
+        <mat-label>Question placeholder</mat-label>
+    </div>
+    <div class="col-sm-9">
+        <mat-form-field appearance="fill" class="w-50">
+            <input matInput type="text" name="placeholderquestion{{ index }}" [(ngModel)]="question.custom_placeholder"
+                #surveyquestionplaceholder (change)="update(question)" />
+        </mat-form-field>
+    </div>
+</div>
+<div class="form-group row">
+    <div class="col-sm-3 col-form-label text-dark">
+        <mat-label>Default value</mat-label>
+    </div>
+    <div class="col-sm-9">
+        <mat-form-field appearance="fill" class="w-50">
+            <input matInput type="text" name="default_value{{ index }}" [(ngModel)]="question.default_value"
+                (change)="update(question)" />
+        </mat-form-field>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+.svg-icon.svg-icon-05x svg {
+  height: 1rem !important;
+  width: 1rem !important;
+}
+.dropdown-menu a {
+  cursor: pointer;
+}
+.dropdown-menu a .fas {
+  color: #6c767b;
+}
+.action-menu a {
+  cursor: pointer;
+}
+
+.form-control::placeholder {
+  font-family: FontAwesome;
+}
+table {
+  width: 100%;
+}

@@ -1,0 +1,9 @@
+.condition_invalid {
+  border: 1px solid red;
+  padding: 5px;
+  border-radius: 10px;
+}
+.groupname {
+  background: #ececec;
+  padding: 5px 10px;
+}

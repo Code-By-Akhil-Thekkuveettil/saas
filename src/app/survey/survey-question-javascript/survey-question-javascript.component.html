@@ -1,0 +1,18 @@
+<div role="document">
+  <div class="modal-content">
+    <div class="modal-header justify-content-end">
+      <button type=" button" mat-icon-button aria-label="Close" (click)="closeDialog()" matTooltip="close">
+        <mat-icon>close</mat-icon></button>
+    </div>
+    <div class="modal-body">
+      <i class="fa fa-angle-left fw-normal" aria-hidden="true"></i>script type="text/javascript"<i
+        class="fa fa-angle-right fw-normal" aria-hidden="true"></i>
+      <textarea class="form-control" id="exampleFormControlTextarea1" rows="14" [(ngModel)]="jscode"></textarea>
+      <i class="fa fa-angle-left fw-normal" aria-hidden="true"></i>/script<i class="fa fa-angle-right fw-normal"
+        aria-hidden="true"></i>
+      <div class="text-end mt-2">
+        <button type="button" mat-raised-button color="primary" (click)="addJs()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

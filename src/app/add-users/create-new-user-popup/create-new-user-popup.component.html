@@ -1,0 +1,71 @@
+<div mat-dialog-title class="d-flex justify-content-between">
+    <h3>Create user</h3>
+    <button type="button" class="btn btn-close" aria-label="Close" (click)="closeDialog()"></button>
+</div>
+<div mat-dialog-content class="d-flex row">
+    <div class="row mb-4">
+        <div class="col-lg-6">
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>First name</mat-label>
+                <input matInput type="text" name="fname" [(ngModel)]="newFirstName" required />
+                <mat-error *ngIf="inValidForm && (newFirstName == '' || newFirstName == undefined)">Name
+                    is
+                    required</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="col-lg-6">
+            <mat-form-field appearance="outline" class="ms-2" class="w-full">
+                <mat-label>Last name</mat-label>
+                <input matInput type="text" name="lname" [(ngModel)]="newLastName" required />
+                <mat-error class="text-danger"
+                    *ngIf="inValidForm && (newLastName == '' || newLastName == undefined)">Name is
+                    required</mat-error>
+            </mat-form-field>
+        </div>
+
+
+    </div>
+    <div class="row mb-4">
+        <div class="col-lg-6">
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" name="email" [(ngModel)]="newEmail" required
+                    (change)="checkEmailValid(newEmail)" />
+                <mat-error *ngIf="inValidForm && (newEmail == '' || newEmail == undefined)">Email
+                    is
+                    required
+                </mat-error>
+                <mat-error *ngIf="!emailValid">Please enter a valid email</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="col-lg-6">
+            <div class="row">
+                <div class="col-lg-4 pr-0">
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Country code</mat-label>
+                        <mat-select name="countryCode" id="" [(ngModel)]="newPhoneCode">
+                            <mat-option value="">Select</mat-option>
+                            <mat-option *ngFor="let con of countryList" [value]="con.id">
+                                {{con.code }} {{con.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-8 pl-0">
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Phone number</mat-label>
+                        <input matInput type="number" name="phone" [(ngModel)]="newPhone" />
+                    </mat-form-field>
+                </div>
+                <div class="text-danger" *ngIf="!phoneValid">Please enter a valid phone number</div>
+            </div>
+        </div>
+    </div>
+    <div class="text-danger" *ngIf="inValidForm">Please enter required fields</div>
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-raised-button (click)="closeDialog()">
+        Cancel
+    </button>
+    <button cdkFocusInitial type="submit" mat-raised-button color="primary" (click)="save()">Create</button>
+</div>

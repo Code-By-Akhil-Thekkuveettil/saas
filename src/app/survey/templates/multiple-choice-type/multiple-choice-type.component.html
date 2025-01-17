@@ -1,0 +1,121 @@
+<div class="form-group row" *ngIf="question.question_type != 4 || optionLoaded">
+    <span class="col-sm-3 col-form-label text-dark mt-2">Options</span>
+    <div class="col-sm-8">
+        <div class="">
+            <div class="form-check" *ngFor="let items of question.option; let i = index;let last = last">
+                <div class="d-flex mb-2" style="align-items: center;">
+                    <mat-icon color="accent">{{items.piping_type ? 'subdirectory_arrow_right'
+                        : ''}}</mat-icon>
+                    <!-- Radio button -->
+                    <mat-radio-button *ngIf="question.question_type == 3" name="optionsRadios"></mat-radio-button>
+                    <!-- Check box -->
+                    <mat-checkbox *ngIf="question.question_type == 2" name="optionscheckbox{{i}}"></mat-checkbox>
+                    <mat-form-field appearance="fill" class="ms-2 mr-4">
+                        <input type="text" matInput name="optnradio{{i}}" [(ngModel)]="items.choices"
+                            [disabled]="items.piping_type == 1" #surveyoptionsInput (change)="updateOpt(items)" />
+                    </mat-form-field>
+                    <div *ngIf="items.piping_type == 0">
+                        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="More">
+                            <mat-icon>arrow_drop_down</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="default_option(items, question.option)">
+                                <span class="text-success me-2" *ngIf="items?.default_option == 1">&#10003;</span>
+                                Default option
+                            </button>
+                            <!-- check box -->
+                            <button mat-menu-item *ngIf="question.question_type == 2" (click)="isExclusive(items)">
+                                <span class="text-success me-2" *ngIf="items?.is_exclusive == 1">&#10003;</span>
+                                <span *ngIf="items?.is_exclusive != 1">Make
+                                </span>
+                                Answer Exclusive
+                            </button>
+                            <button mat-menu-item (click)="allowTextEntry(items)">
+                                <span class="text-success me-2" *ngIf="items?.text_entry == 1">&#10003;</span>
+                                Allow Text Entry
+                            </button>
+                            <button mat-menu-item (click)="allowTextEntryRequired(items)" *ngIf="items.text_entry == 1">
+                                <span class="text-success me-2"
+                                    *ngIf="items.is_required_text_entry == 1">&#10003;</span>
+                                Text Entry Required
+                            </button>
+                            <button mat-menu-item (click)="displayLogic(items)">
+                                {{items?.display_logic ? 'Edit':''}} Display logic
+                            </button>
+                            <app-pipe-text [id]="id" [question_id]="question.question_identifier"
+                                (addPipeText)="addPipe($event,items)"></app-pipe-text>
+                            <button mat-menu-item (click)="editOpt(items)">
+                                <mat-icon>edit</mat-icon>
+                                <span>Edit</span>
+                            </button>
+                        </mat-menu>
+                    </div>
+                    <mat-form-field appearance="fill" style="width: 75px;"
+                        *ngIf="items.piping_type == 0 && question?.option?.length > 1">
+                        <mat-label>Move</mat-label>
+                        <mat-select name="type" placeholder="Select page order" [(ngModel)]="items.option_order"
+                            (selectionChange)="moveOption(i+1,items.option_order)">
+                            <mat-option [value]="option.option_order"
+                                [disabled]="items.option_order == option.option_order"
+                                *ngFor="let option of question?.option">{{option.option_order}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button mat-icon-button color="warn" matTooltip="Delete" *ngIf="items.piping_type == 0"
+                        (click)="openConfirmationDialog('deleteoptions', items, question.option)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+                <div class="d-flex mb-2">
+                    <div style="width: 24px;"></div>
+                    <div *ngIf="items.text_entry == 1"
+                        [ngClass]="question.question_type == 2 ? 'ms-3' :  question.question_type == 3 ? 'ms-4' :''">
+                        &nbsp;</div>
+                    <mat-form-field appearance="fill" *ngIf="items.text_entry == 1" class="ms-2">
+                        <input type="text" matInput disabled /></mat-form-field>
+                </div>
+            </div>
+            <div class="form-check">
+                <div *ngIf="question.isnew" class="d-flex mb-2" style="align-items: center;">
+                    <div style="width: 24px;"></div>
+                    <mat-radio-button *ngIf="question.question_type == 3" name="optionsRadios"></mat-radio-button>
+                    <mat-checkbox *ngIf="question.question_type == 2" name="optncheckbox"></mat-checkbox>
+                    <mat-form-field appearance="fill" class="ms-2">
+                        <input type="text" name="newoption" matInput [(ngModel)]="newoption" />
+                    </mat-form-field>
+                    <div></div>
+                </div>
+            </div>
+            <div class="action row">
+                <div class="col-sm-6">
+                    <button mat-button color="primary" (click)="addNew(question)">Add
+                        new option</button>
+                </div>
+                <div class="col-sm-6">
+                    <button mat-button color="primary" (click)="addMultipleAlreadyAdded(question)">Add
+                        multiple
+                        options</button>
+
+                </div>
+            </div>
+            <div class="multiple_options row card p-2" *ngIf="question.isMultipleOptions">
+                <mat-form-field appearance="fill" class="mb-2 mt-2">
+                    <textarea matInput matInput [(ngModel)]="question.multipleOptionText" name="multiple_options"
+                        placeholder="Enter text here"></textarea>
+                </mat-form-field>
+                <mat-checkbox [(ngModel)]="question.remove_option"> Remove existing options</mat-checkbox>
+                <div class="d-flex justify-content-end mt-2">
+                    <button mat-raised-button color="primary" [disabled]="!question.multipleOptionText"
+                        (click)="multiConvertionAlreadyAdded(question)">Add</button>
+                    <button mat-raised-button class="ms-2" (click)="multipleConvertionCancel(question)">Cancel</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div *ngIf="question.question_type == 4" class="mt-2">
+    <mat-slide-toggle [checked]="optionLoaded" [labelPosition]="'before'" (change)="loadOptions($event)">
+        Show options
+    </mat-slide-toggle>
+</div>

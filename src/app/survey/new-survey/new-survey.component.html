@@ -1,0 +1,59 @@
+<div mat-dialog-title class="d-flex justify-content-between">
+  <h3>Create New Survey</h3>
+  <button type="button" class="btn btn-close" aria-label="Close" (click)="closeDialog()"
+    [disabled]="isSubmitted"></button>
+</div>
+<div mat-dialog-content>
+  <div>
+    <form #surveyForm="ngForm" method="post" autocomplete="off">
+      <div class="mb-3 col-sm-12 col-lg-12 mt-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Enter survey title</mat-label>
+          <input type="text" name="survey_name" placeholder="Enter survey title" #surveyName="ngModel" matInput
+            [(ngModel)]="survey_name" required #surveyInput (click)="surveyInput.select()" (change)="checkNull()" />
+          <mat-error
+            *ngIf="((surveyName.invalid && surveyName.touched) || (surveyForm.invalid && surveyForm.submitted && surveyName.invalid))">Survey
+            name is required
+          </mat-error>
+          <mat-error *ngIf="(surveyName.touched && !validateSurveyName && surveyName.valid)">Survey name
+            cannot be empty
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <div class="row mt-2">
+          <label class="col">Include sample question</label>
+          <span class="col form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" [(ngModel)]="includeQuestion"
+              name="includeQuestion" [checked]="includeQuestion" />
+            <!-- <label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox input</label> -->
+          </span>
+        </div>
+        <div class="row mt-2">
+          <label class="col">Include thank you page</label>
+          <span class="col form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" [(ngModel)]="includeThankyou"
+              name="includeThankyou" [checked]="includeThankyou" />
+            <!-- <label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox input</label> -->
+          </span>
+        </div>
+        <div class="row mt-2">
+          <label class="col">Include contact form</label>
+          <span class="col form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" [(ngModel)]="includeContact"
+              name="includeContact" [checked]="includeContact" />
+            <!-- <label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox input</label> -->
+          </span>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-raised-button (click)="closeDialog()" [disabled]="isSubmitted">
+    Cancel
+  </button>
+  <button cdkFocusInitial type="submit" mat-raised-button color="primary" data-bs-toggle="modal"
+    [disabled]="!surveyForm.valid || isSubmitted" (click)="create(surveyForm)">Create</button>
+</div>

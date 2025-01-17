@@ -1,0 +1,331 @@
+<div class="page page-center d-none">
+  <div class="container-tight py-4">
+    <div class="text-center mb-4">
+      <span class="navbar-brand navbar-brand-autodark"><img src="/assets/Images/logo.png" height="45" alt=""></span>
+    </div>
+    <form [formGroup]="signUpForm" (ngSubmit)="signUp()" class="card card-md" action="." method="get">
+      <div class="card-body">
+        <h2 class="card-title text-center mb-4">Create new account</h2>
+        <label class="form-label">COMPANY INFORMATION</label>
+        <div class="mb-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Company Legal Name</mat-label>
+            <input type="text" formControlName="companyName" required matInput placeholder="Company Legal Name">
+            <mat-error
+              *ngIf="signUpForm.controls.companyName.touched && signUpForm.controls.companyName.errors?.required">
+              Please enter Company Name!
+            </mat-error>
+            <mat-error
+              *ngIf="signUpForm.controls.companyName.touched && signUpForm.controls.companyName.errors?.whitespace">
+              Invalid format
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="mb-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Company Website</mat-label>
+            <input type="text" formControlName="companyWebsite" required matInput placeholder="Company website">
+            <mat-error
+              *ngIf="signUpForm.controls.companyWebsite.touched && signUpForm.controls.companyWebsite.errors?.required">
+              Please enter Company Website Name!
+            </mat-error>
+            <mat-error
+              *ngIf="signUpForm.controls.companyWebsite.touched && signUpForm.controls.companyWebsite.errors?.whitespace">
+              Invalid format
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <label class="form-label mt-2">ACCOUNT SETTINGS</label>
+        <div class="mb-4">
+          <mat-form-field appearance="outline">
+            <mat-label>First Name</mat-label>
+            <input type="text" formControlName="firstName" required matInput placeholder="First Name">
+            <mat-error *ngIf="signUpForm.controls.firstName.touched && signUpForm.controls.firstName.errors?.required">
+              Please enter First Name!</mat-error>
+            <mat-error
+              *ngIf="signUpForm.controls.firstName.touched && signUpForm.controls.firstName.errors?.whitespace">
+              class="error">Invalid format
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="mb-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Last Name</mat-label>
+            <input type="text" formControlName="LastName" required matInput placeholder="Last Name">
+            <mat-error *ngIf="signUpForm.controls.LastName.touched && signUpForm.controls.LastName.errors?.required">
+              Please enter Last Name!
+            </mat-error>
+            <mat-error *ngIf="signUpForm.controls.LastName.touched && signUpForm.controls.LastName.errors?.whitespace">
+              Invalid format
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="mb-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input type="email" formControlName="email" required matInput>
+            <mat-error *ngIf="signUpForm.controls.email.touched && signUpForm.controls.email.errors?.required">
+              Please enter email address.!
+            </mat-error>
+            <mat-error *ngIf="signUpForm.controls.email.touched && signUpForm.controls.email.errors?.email">
+              Email address not well formed.!
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="mb-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input [type]="showPassword ? 'text' : 'password'" required formControlName="password" autocomplete="off"
+              matInput>
+            <button mat-icon-button matSuffix (click)="showPassword = !showPassword"
+              [matTooltip]="showPassword ? 'Hide password' : 'Show password'">
+              <mat-icon>{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <button mat-icon-button matSuffix (mouseenter)="isHidden = !isHidden" (mouseleave)="isHidden = !isHidden">
+              <mat-icon>info</mat-icon>
+            </button>
+            <mat-error *ngIf="signUpForm.controls.password.touched && signUpForm.controls.password.errors?.required">
+              Please enter password.!
+            </mat-error>
+            <mat-error *ngIf="signUpForm.controls.password.touched && signUpForm.controls.password.errors?.minlength">
+              Password must be at least 8 characters.!
+            </mat-error>
+            <ng-container *ngIf="isHidden">
+              <br>
+              <p class="fst-italic fw-lighter"><small>* Min 8 characters <br>* Minimum one special character<br>
+                  * Minimum one digit<br>* Minimum one capital letter<br>* Minimum one small letter</small></p>
+            </ng-container>
+          </mat-form-field>
+        </div>
+        <div class="mb-0">
+          <mat-form-field appearance="outline">
+            <mat-label>Confirm password</mat-label>
+            <input type="password" formControlName="confirmPassword" required matInput placeholder="Confirm Password"
+              autocomplete="off">
+            <mat-error
+              *ngIf="signUpForm.controls.confirmPassword.touched && signUpForm.controls.confirmPassword.errors?.required">
+              Please enter Confirm Password!
+            </mat-error>
+            <mat-error
+              *ngIf="signUpForm.controls.confirmPassword.touched && signUpForm.controls.confirmPassword.errors?.mustMatch">
+              Passwords must match
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="row mb-4">
+          <div class="col-5">
+            <mat-form-field appearance="outline">
+              <mat-label>Select Country code</mat-label>
+              <mat-select formControlName="country_code" name="countryCode" id="">
+                <mat-option value="">Select</mat-option>
+                <mat-option *ngFor="let con of countryList" [value]="con?.id"> {{con.code }} {{con.name}}</mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="signUpForm.controls?.country_code?.touched && signUpForm.controls?.country_code?.errors?.required">
+                Please enter country code
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-7">
+            <mat-form-field appearance="outline">
+              <mat-label>Phone number</mat-label>
+              <input type="number" formControlName="country_Number" required matInput placeholder="Phone number"
+                (keypress)="keyPressNumbersWithDecimal($event)" placeholder="eg: 778 554 222 444" autocomplete="off">
+              <mat-error
+                *ngIf="signUpForm.controls.country_Number.touched && signUpForm.controls.country_Number.errors?.required">
+                Please enter phone number.!
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="mb-4">
+          <mat-checkbox formControlName="acceptTerms">Agree the <a tabindex="-1">terms and policy</a></mat-checkbox>
+        </div>
+        <div class="form-footer">
+          <button type="submit" [disabled]="!signUpForm.valid" mat-raised-button color="primary" class="w-100">
+            Create new account</button>
+        </div>
+      </div>
+    </form>
+    <div class="text-center text-muted mt-3">
+      Already have account? <a href="" tabindex="-1">Sign in</a>
+    </div>
+  </div>
+</div>
+
+<!-- [ auth-signup ] start -->
+<div class="auth-wrapper" style="background-image: url(/assets/Images/login.png); background-attachment: fixed;
+background-size: contain;
+background-position-y: bottom;
+background-repeat: no-repeat;">
+	<div class="auth-content">
+		<div class="card">
+			<div class="row align-items-center text-center">
+				<div class="col-md-12">
+					<div class="card-body" style="padding-left: 20px !important; padding-right: 20px !important;">
+						<img src="/assets/Images/logo.png" alt="" class="img-fluid mb-4" width="110">
+						<h4 class="mb-3 font-weight-bold">Sign up</h4>
+						<form [formGroup]="signUpForm" (ngSubmit)="signUp()" class="card card-md" action="." method="get">
+              <div class="">
+
+                <label class="form-label font-weight-bold text-left">COMPANY INFORMATION</label>
+                <div class="mb-4">
+                  <mat-form-field appearance="fill">
+                    <input type="text" formControlName="companyName" required matInput placeholder="Company Legal Name">
+                    <mat-error
+                      *ngIf="signUpForm.controls.companyName.touched && signUpForm.controls.companyName.errors?.required">
+                      Please enter Company Name!
+                    </mat-error>
+                    <mat-error
+                      *ngIf="signUpForm.controls.companyName.touched && signUpForm.controls.companyName.errors?.whitespace">
+                      Invalid format
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="mb-4">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Company Website</mat-label>
+                    <input type="text" formControlName="companyWebsite" required matInput placeholder="Company website">
+                    <mat-error
+                      *ngIf="signUpForm.controls.companyWebsite.touched && signUpForm.controls.companyWebsite.errors?.required">
+                      Please enter Company Website Name!
+                    </mat-error>
+                    <mat-error
+                      *ngIf="signUpForm.controls.companyWebsite.touched && signUpForm.controls.companyWebsite.errors?.whitespace">
+                      Invalid format
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <label class="form-label mt-2 font-weight-bold text-left">ACCOUNT SETTINGS</label>
+                <div class="mb-4">
+                  <mat-form-field appearance="fill">
+                    <mat-label>First Name</mat-label>
+                    <input type="text" formControlName="firstName" required matInput placeholder="First Name">
+                    <mat-error
+                      *ngIf="signUpForm.controls.firstName.touched && signUpForm.controls.firstName.errors?.required">
+                      Please enter First Name!</mat-error>
+                    <mat-error
+                      *ngIf="signUpForm.controls.firstName.touched && signUpForm.controls.firstName.errors?.whitespace">
+                      class="error">Invalid format
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="mb-4">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Last Name</mat-label>
+                    <input type="text" formControlName="LastName" required matInput placeholder="Last Name">
+                    <mat-error
+                      *ngIf="signUpForm.controls.LastName.touched && signUpForm.controls.LastName.errors?.required">
+                      Please enter Last Name!
+                    </mat-error>
+                    <mat-error
+                      *ngIf="signUpForm.controls.LastName.touched && signUpForm.controls.LastName.errors?.whitespace">
+                      Invalid format
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="mb-4">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Email</mat-label>
+                    <input type="email" formControlName="email" required matInput>
+                    <mat-error *ngIf="signUpForm.controls.email.touched && signUpForm.controls.email.errors?.required">
+                      Please enter email address.!
+                    </mat-error>
+                    <mat-error *ngIf="signUpForm.controls.email.touched && signUpForm.controls.email.errors?.email">
+                      Email address not well formed.!
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="mb-4">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Password</mat-label>
+                    <input [type]="showPassword ? 'text' : 'password'" required formControlName="password"
+                      autocomplete="off" matInput>
+                    <button mat-icon-button matSuffix (click)="showPassword = !showPassword"
+                      [matTooltip]="showPassword ? 'Hide password' : 'Show password'">
+                      <mat-icon>{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                    <button mat-icon-button matSuffix (mouseenter)="isHidden = !isHidden"
+                      (mouseleave)="isHidden = !isHidden">
+                      <mat-icon>info</mat-icon>
+                    </button>
+                    <mat-error
+                      *ngIf="signUpForm.controls.password.touched && signUpForm.controls.password.errors?.required">
+                      Please enter password.!
+                    </mat-error>
+                    <mat-error
+                      *ngIf="signUpForm.controls.password.touched && signUpForm.controls.password.errors?.minlength">
+                      Password must be at least 8 characters.!
+                    </mat-error>
+                    <ng-container *ngIf="isHidden">
+                      <br>
+                      <p class="fst-italic fw-lighter"><small>* Min 8 characters <br>* Minimum one special character<br>
+                          * Minimum one digit<br>* Minimum one capital letter<br>* Minimum one small letter</small></p>
+                    </ng-container>
+                  </mat-form-field>
+                </div>
+                <div class="mb-4">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Confirm password</mat-label>
+                    <input type="password" formControlName="confirmPassword" required matInput
+                      placeholder="Confirm Password" autocomplete="off">
+                    <mat-error
+                      *ngIf="signUpForm.controls.confirmPassword.touched && signUpForm.controls.confirmPassword.errors?.required">
+                      Please enter Confirm Password!
+                    </mat-error>
+                    <mat-error
+                      *ngIf="signUpForm.controls.confirmPassword.touched && signUpForm.controls.confirmPassword.errors?.mustMatch">
+                      Passwords must match
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+         
+                  <div class="mb-4">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Select Country code</mat-label>
+                      <mat-select formControlName="country_code" name="countryCode" id="">
+                        <mat-option value="">Select</mat-option>
+                        <mat-option *ngFor="let con of countryList" [value]="con?.id"> {{con.code }} {{con.name}}</mat-option>
+                      </mat-select>
+                      <mat-error
+                        *ngIf="signUpForm.controls?.country_code?.touched && signUpForm.controls?.country_code?.errors?.required">
+                        Please enter country code
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="mb-4">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Phone number</mat-label>
+                      <input type="number" formControlName="country_Number" required matInput placeholder="Phone number"
+                        (keypress)="keyPressNumbersWithDecimal($event)" placeholder="eg: 778 554 222 444" autocomplete="off">
+                      <mat-error
+                        *ngIf="signUpForm.controls.country_Number.touched && signUpForm.controls.country_Number.errors?.required">
+                        Please enter phone number.!
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+              
+                <!-- <div class="mb-3">
+                  <mat-checkbox formControlName="acceptTerms">Agree the <a tabindex="-1">terms and policy</a></mat-checkbox>
+                </div> -->
+                <div class="form-group text-start mt-2">
+                  <mat-checkbox formControlName="acceptTerms"> Agree <a> terms and policy</a></mat-checkbox>
+                </div>
+                <!-- <div class="form-footer">
+                  <button type="submit" [disabled]="!signUpForm.valid" mat-raised-button color="primary" class="w-100">
+                    Create new account</button>
+                </div> -->
+                <button class="btn btn-primary btn-block mb-4 w-100" type="submit" [disabled]="!signUpForm.valid">Sign
+                  up</button>
+                <p class="mb-2">Already have an account? <a href="auth-signin.html" class="f-w-400">Signin</a></p>
+              </div>
+            </form>
+            <!-- <button class="btn btn-primary btn-block mb-4 w-100" type="submit" [disabled]="!signUpForm.valid">Sign up</button>
+						<p class="mb-2">Already have an account? <a href="auth-signin.html" class="f-w-400">Signin</a></p> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- [ auth-signup ] end -->

@@ -1,0 +1,69 @@
+<div mat-dialog-title class="d-flex justify-content-between m-0">
+    <h3>{{ type == 'create' ? 'Create' :'Edit'}} page</h3>
+    <button type="button" class="btn btn-close" aria-label="Close" (click)="closeDialog()"></button>
+</div>
+<mat-tab-group class="w-100">
+    <mat-tab label="Page">
+        <div class="row mt-2 w-100">
+            <mat-form-field appearance="outline">
+                <mat-label>Page title</mat-label>
+                <input type="text" name="content" matInput [(ngModel)]="page.title" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="mt-2">
+                <mat-label>Page description</mat-label>
+                <textarea type="text" name="content" matInput [(ngModel)]="page.description"></textarea>
+            </mat-form-field>
+            <div class="mt-2">
+                <div>Override response status when this page is reached</div>
+                <mat-radio-group class="row" style="flex-direction: column;" aria-label="Select an option"
+                    [(ngModel)]="page.response_status_code">
+                    <mat-radio-button class="tp-radio-button mt-2" [value]="0">Change
+                        response
+                        status
+                        to
+                        'Partial' </mat-radio-button>
+                    <mat-radio-button class="tp-radio-button mt-2" [value]="2">Change
+                        response
+                        status
+                        to
+                        'Complete' </mat-radio-button>
+                    <mat-radio-button class="tp-radio-button mt-2" [value]="1">Change
+                        response
+                        status
+                        to
+                        'Disqualified' </mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div class="mt-2">
+                <div>Page options</div>
+                <mat-radio-group aria-label="Select an option" [(ngModel)]="page.is_active">
+                    <mat-radio-button class="tp-radio-button mt-2" [value]="2">Disable </mat-radio-button>
+                    <mat-radio-button class="tp-radio-button mt-2 ms-2" [value]="1">Active</mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div class="row mt-2 align-items-end">
+                <label class="col-sm-3">Terminal Page</label>
+                <div class="col-sm-5">
+                    <div class="form-check form-switch pt-2 pb-2">
+                        <input class="form-check-input" type="checkbox" role="switch" [(ngModel)]="page.terminal_status"
+                            name="page" [checked]="page.terminal_status">
+                    </div>
+                </div>
+            </div>
+            <div align="end" class="mt-2 mb-2">
+                <button mat-raised-button (click)="closeDialog()">
+                    Cancel
+                </button>
+                <button cdkFocusInitial type="submit" mat-raised-button color="primary" class="ms-2"
+                    (click)="type == 'create' ?  createPage() : editPage()">
+                    {{ type == 'create' ? 'Create' :'Update'}}
+                </button>
+            </div>
+        </div>
+
+    </mat-tab>
+    <mat-tab label="Action">
+        <app-page-action [survey_identifier]="survey_identifier" [pageIndex]="page.page_num"
+            [response_status_code]="page?.response_status_code"></app-page-action>
+    </mat-tab>
+</mat-tab-group>

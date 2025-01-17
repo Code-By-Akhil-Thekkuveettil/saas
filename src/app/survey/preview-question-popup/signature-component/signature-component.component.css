@@ -1,0 +1,8 @@
+.inputType,
+.inputTextEntry {
+  min-height: 50px;
+  background-color: #f1f1f1;
+  border: 1px solid #bcaeae;
+  padding-left: 1rem;
+  align-content: center;
+}

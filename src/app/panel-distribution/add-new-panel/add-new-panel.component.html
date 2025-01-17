@@ -1,0 +1,39 @@
+<div role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">Create New Panel</h5>
+      <button type="button" mat-icon-button matTooltip="Close" aria-label="Close" (click)="closeDialog()">
+        <mat-icon>close</mat-icon></button>
+    </div>
+    <div class="modal-body">
+      <form #panelForm="ngForm" method="post" autocomplete="off">
+        <div class="mb-3 col-sm-12 col-lg-12">
+          <mat-form-field appearance="outline">
+            <mat-label>Enter Panel Name</mat-label>
+            <input type="text" matInput name="panelInput" placeholder="Enter panel name" required
+              [(ngModel)]="panelName" #panelInput="ngModel" />
+            <!-- <span *ngIf="(surveyName.invalid && surveyName.touched) || (panelForm.submitted && panelForm.invalid)"
+              class="error">Please enter survey title</span> -->
+          </mat-form-field>
+          <div
+            *ngIf="(panelInput.invalid && panelInput.touched) || (panelForm.submitted && panelForm.invalid && panelInput.invalid)"
+            class="text-danger">Please enter panel name</div>
+        </div>
+        <div>
+          <mat-form-field appearance="outline">
+            <mat-label>Description</mat-label>
+            <textarea matInput="description" rows="3" [(ngModel)]="description"></textarea>
+          </mat-form-field>
+        </div>
+        <div class="modal-footer mt-2">
+          <button mat-raised-button (click)="closeDialog()">
+            Cancel
+          </button>
+          <button type="submit" mat-raised-button color="primary" data-bs-toggle="modal" class="ms-2"
+            (click)="save(panelInput)">Create</button>
+          <!-- <mat-spinner></mat-spinner> -->
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

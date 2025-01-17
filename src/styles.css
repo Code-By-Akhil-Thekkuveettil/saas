@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Nunito:300,400,400i,600,700");
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    position: relative;
+    font-family: "Nunito", sans-serif;
+}
+
+.error {
+    color: red;
+}
+
+.spinner {
+    width: 100%;
+    height: 100%;
+    left: 0;
+    margin: 0 auto;
+    right: 0;
+    display: block;
+    content: '';
+    position: absolute;
+    z-index: 111111;
+    top: 10% !important;
+}
+
+.spinner img {
+    width: 60%;
+}
+
+select {
+
+    /* styling */
+    background-color: white;
+    border: thin solid #bcaeae;
+    border-radius: 4px;
+    display: inline-block;
+    font: inherit;
+    line-height: 1.5em;
+    padding: 0.5em 3.5em 0.5em 1em;
+  
+    /* reset */
+  
+    margin: 0;      
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    appearance: none;
+    -moz-appearance: none;
+  }
+  
+  select.dropdown {
+    background-image:
+      linear-gradient(45deg, transparent 50%, gray 50%),
+      linear-gradient(135deg, gray 50%, transparent 50%),
+      linear-gradient(to right, #ccc, #ccc);
+    background-position:
+      calc(100% - 20px) calc(1em + 2px),
+      calc(100% - 15px) calc(1em + 2px),
+      calc(100% - 2.5em) 0.5em;
+    background-size:
+      5px 5px,
+      5px 5px,
+      1px 1.5em;
+    background-repeat: no-repeat;
+  }
+  
+  select.dropdown:focus {
+    background-image:
+      linear-gradient(45deg, green 50%, transparent 50%),
+      linear-gradient(135deg, transparent 50%, green 50%),
+      linear-gradient(to right, #ccc, #ccc);
+    background-position:
+      calc(100% - 15px) 1em,
+      calc(100% - 20px) 1em,
+      calc(100% - 2.5em) 0.5em;
+    background-size:
+      5px 5px,
+      5px 5px,
+      1px 1.5em;
+    background-repeat: no-repeat;
+    border-color: green;
+    outline: 0;
+  }
+
+  .pointer {cursor: pointer;}
+
+  .boxShadow {
+    top: 10px;
+    padding: 2px;
+    height: auto;
+    color: black;
+    border: 1px solid rgb(73, 68, 68);
+    border-radius: 10px;
+    background-color: #ffffff;
+    background-position: left top;
+    background-repeat: repeat;
+    width: auto;
+    right: 0px;
+    opacity: 1.5;
+    z-index: 1;
+}
+
+
+/* // Theme variables, must be included before the libraries to allow overriding defaults */
+@import "theme/theme-variables";
+
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "~@fortawesome/fontawesome-free/scss/brands.scss";
+@import "~@fortawesome/fontawesome-free/scss/regular.scss";
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";
+
+
+/* // Theme customization */
+@import "theme/theme";
+html, body { height: 100%; }
+
+
+
+.colHeading{
+  font-size: 12px !important;
+  font-weight:600 !important;
+}
+.mat-form-field-underline{
+  display: none !important;
+}
+.mat-form-field-appearance-fill{
+  border: 1px solid #bcaeae;
+}
+
+.mat-error {
+  display: block;
+  margin-top: 15px !important;
+}
+#viewsurvey .mat-form-field-wrapper.ng-tns-c219-3 {
+  padding: 0px !important;
+}
+#viewsurvey .mat-form-field-appearance-outline .mat-form-field-wrapper{
+  margin:0px !important
+}
+#surveyattend .mat-progress-bar-fill::after {
+  background-color: #4586b8 !important;
+}
+#surveyattend .mat-checkbox-inner-container {
+  display: inline-block;
+  height: 25px;
+  line-height: 0;
+  margin: auto;
+  margin-right: 8px;
+  order: 0;
+  position: relative;
+  vertical-align: middle;
+  white-space: nowrap;
+  flex-shrink: 0;
+  width: 25px;
+}
+#surveyattend .mat-checkbox-indeterminate.mat-primary .mat-checkbox-background, #surveyattend .mat-checkbox-checked.mat-primary .mat-checkbox-background {
+  background-color: #4586b8;
+}
+#surveyattend .form-check-input:checked {
+  background-color: #4586b8;
+  border-color: #4586b8;
+}

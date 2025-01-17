@@ -1,0 +1,30 @@
+.operator {
+  font-size: 24px;
+  font-weight: 600;
+}
+.plus {
+  color: green;
+}
+.minus {
+  font-size: 18px;
+}
+.tp-radio-group {
+  display: inline-flex;
+  flex-direction: column;
+}
+.tp-radio-button {
+  margin: 5px;
+}
+.tp-selected-value {
+  margin: 15px 0;
+}
+select {
+  width: 150px !important;
+  /* overflow: hidden; */
+}
+option {
+  width: 200px !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -1,0 +1,178 @@
+<div>
+    <!-- [ breadcrumb ] start -->
+    <div class="page-header">
+        <div class="page-block">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="page-header-title">
+                        <h2 class="m-b-10">{{surveyTitle}}</h2>
+                    </div>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a [routerLink]="['/survey']">Survey list</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a [routerLink]="['/survey/questions/', surveyIdentifier]">
+                                Survey view</a>
+                        </li>
+                        <li class="breadcrumb-item">Response</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-body">
+        <!-- Download survey responses -->
+        <div class="">
+            <div class="card">
+                <div class="card-header justify-content-between" *ngIf="survey_count != 0">
+                    <div>
+                        <h5 class="card-title">Responses : {{survey_count}}</h5>
+                        <div class="mt-1">Completes - {{survey_complete_response_count}} / Partials -
+                            {{survey_partial_response_count}} /
+                            Disqualified - {{survey_disqualified_response_count}}</div>
+                    </div>
+                    <div class="search">
+                        <input type="text" name="search" [(ngModel)]="searchText" autocomplete="off"
+                            placeholder="Search..">
+                        <span class="search-icon"><i class="fa fa-search ps-2"></i></span>
+                    </div>
+                </div>
+                <div class="card-body mb-0">
+                    <div class="mb-4 row" align="end" *ngIf="survey_count != 0">
+                        <div>
+                            <button mat-raised-button color="primary" class="fas me-2"
+                                [disabled]="selection.selected.length == 0" (click)="removeSelectedRows()">Delete
+                                selected rows</button>
+                            <button mat-flat-button [disabled]="isLoading || page_count == 0"
+                                (click)="downloadSurveyResponse()"><i class="fas me-2"
+                                    [ngClass]="{'fa-spin fa-spinner mr-2': isLoading, 'fa-download': !isLoading}"></i>
+                                Download</button>
+                            <select class="dropdown" name="responseType" id="" (change)="updateResponseType($event)"
+                                class="ms-2" [disabled]="isLoading" [(ngModel)]="responseType">
+                                <option [value]="3">All</option>
+                                <option [value]="0">Partial</option>
+                                <option [value]="1">Disqualified</option>
+                                <option [value]="2">Completed</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <!-- NEW -->
+                    <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+                    <div class="table-responsive" *ngIf="page_count != 0">
+                        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" id="table-scroll">
+                            <!-- Checkbox Column -->
+                            <ng-container matColumnDef="select">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <mat-checkbox (change)="$event ? masterToggle() : null" class="p-2"
+                                        [checked]="selection.hasValue() && isAllSelected()"
+                                        [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                    </mat-checkbox>
+                                </th>
+                                <td mat-cell *matCellDef="let row">
+                                    <mat-checkbox (click)="$event.stopPropagation()" class="p-2"
+                                        (change)="$event ? selection.toggle(row) : null"
+                                        [checked]="selection.isSelected(row)">
+                                    </mat-checkbox>
+                                </td>
+                            </ng-container>
+                            <!-- index Column -->
+                            <ng-container matColumnDef="index">
+                                <th mat-header-cell class="bg-dark p-2" *matHeaderCellDef> SL.No </th>
+                                <td mat-cell *matCellDef="let element" class="p-2"> {{element.index}} </td>
+                            </ng-container>
+                            <!-- response_status Column -->
+                            <ng-container matColumnDef="response_status">
+                                <th mat-header-cell *matHeaderCellDef class="bg-dark p-2"> Response status </th>
+                                <!--  0 - survey response partial , 
+                                            1 - response disqualified and 
+                                            2 - response complete -->
+                                <td mat-cell *matCellDef="let element" style="text-align: center;" class="p-2">
+                                    <span [ngClass]="element?.response_status == 1 ?
+                                        'Disqualified' :
+                                        element?.response_status == 2 ? 'Completed':'Partial'" class="badge"
+                                        style="text-transform: uppercase">{{element?.response_status == 1 ?
+                                        'Disqualified' :
+                                        element?.response_status == 2 ? 'Completed':'Partial'}}</span>
+                                </td>
+                            </ng-container>
+                            <!-- survey_live_status Column -->
+                            <ng-container matColumnDef="survey_live_status">
+                                <th mat-header-cell class="bg-dark p-2" *matHeaderCellDef>Survey status </th>
+                                <td mat-cell *matCellDef="let element" style="text-align: center;" class="p-2">
+                                    <span class="badge" [ngClass]="element?.survey_live_status == 1 ?
+                                    'live' :''">{{element?.survey_live_status == 0 ?
+                                        'Test':'Live'}}</span>
+                                </td>
+                            </ng-container>
+                            <!-- ip Column -->
+                            <ng-container matColumnDef="ip">
+                                <th mat-header-cell class="bg-dark p-2" *matHeaderCellDef> Ip</th>
+                                <td mat-cell *matCellDef="let element" class="p-2"> {{element?.ip}} </td>
+                            </ng-container>
+                            <!-- variable Column -->
+                            <ng-container matColumnDef="variables">
+                                <th mat-header-cell class="bg-dark p-2" *matHeaderCellDef> Variables</th>
+                                <td mat-cell *matCellDef="let element">
+                                    <ng-container *ngFor="let item of element?.variables">
+                                        <div class="p-2">
+                                            <span class="bx--col-xs-5 bx--col-md-5"> {{item?.variable}} :</span>
+                                            <span class="bx--col-xs-5 bx--col-md-5">{{item?.variable_value}} </span>
+                                        </div>
+                                    </ng-container>
+                                </td>
+                            </ng-container>
+                            <!-- date Column -->
+                            <ng-container matColumnDef="createdDate">
+                                <th mat-header-cell class="bg-dark p-2" *matHeaderCellDef> Created date </th>
+                                <td mat-cell *matCellDef="let element" class="p-2"> {{element?.createdDate}} </td>
+                            </ng-container>
+                            <ng-container *ngFor="let columnName of columnNames?.slice(8)" [matColumnDef]="columnName">
+                                <th mat-header-cell *matHeaderCellDef class="bg-dark truncate-text p-2"
+                                    style="text-transform: uppercase;">{{ columnName }}</th>
+                                <td mat-cell *matCellDef="let row" class="truncate-text p-2"
+                                    matTooltip="{{row?.answer[columnName]?.choices}}">
+                                    <span *ngIf="!row?.answer[columnName]?.file">{{row?.answer[columnName]?.choices
+                                        || ' - '}}</span>
+                                    <a target="_blank" *ngIf="row?.answer[columnName]?.file"
+                                        [href]="row?.answer[columnName]?.file">{{row?.answer[columnName]?.choices}}</a>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="action">
+                                <th mat-header-cell class="bg-dark p-2" *matHeaderCellDef> Action </th>
+                                <td mat-cell *matCellDef="let element" class="align-items-center p-2">
+                                    <mat-icon color="warn" (click)="deleteUserResponse(element?.id)"
+                                        style="cursor: pointer;">
+                                        delete</mat-icon>
+                                    <mat-icon (click)="viewUserResponse(element?.id)" style="cursor: pointer;">
+                                        download</mat-icon>
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="columnNames"></tr>
+                            <tr mat-row *matRowDef="let row; columns: columnNames;">
+                            </tr>
+                        </table>
+                    </div>
+                    <mat-paginator *ngIf="page_count != 0" #paginator showFirstLastButtons [pageSize]="limit"
+                        [pageIndex]="pageIndex" [pageSizeOptions]="[1, 5, 10, 25, 100]" [length]="page_count"
+                        aria-label="Select page" (page)="handlePageEvent($event)">
+                    </mat-paginator>
+                    <div *ngIf="page_count == 0" class="text-center mt-2">
+                        <div class="empty">
+                            <div class="empty-img"><img src="/assets/Images/undraw_printing_invoices_5r4r.svg"
+                                    height="128" alt="">
+                            </div>
+                            <p class="empty-title">No responses recently</p>
+                            <p class="empty-subtitle text-muted">
+                                No results found
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- container-fluid -->
+    </div>
+    <!-- content -->
+</div>

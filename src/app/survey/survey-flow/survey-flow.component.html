@@ -1,0 +1,204 @@
+<!-- [ breadcrumb ] start -->
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <div class="page-header-title">
+                    <h2 class="m-b-10">{{surveyTitle}}</h2>
+                </div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a [routerLink]="['/survey']">Survey list</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a [routerLink]="['/survey/questions/', surveyIdentifier]">
+                            Survey view</a>
+                    </li>
+                    <li class="breadcrumb-item">Survey flow</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-body" id="viewsurvey">
+    <!-- DISPLAY SURVEY VARIABLES -->
+    <div class="card">
+        <div class="card-header d-flex align-content-center justify-content-between position-relative">
+            <h3 class="mat-card-title mb-0">Add variables</h3>
+            <div class="card-hearder-action">
+                <button type="button" class="btn btn-primary btn-sm" (click)="addNewURLVariable()">
+                    <i class="bi bi-plus"></i> Add variable</button>
+            </div>
+            <div class="card addvariable" *ngIf="isnewvariable">
+                <div class="card-header">
+                    <h4 class="card-title font-weight-bold text-dark">Add variable</h4>
+                </div>
+                <div class="card-body">
+                    <div class="question-block">
+                        <form #vrfrm="ngForm">
+                            <div class="form-group row">
+                                <div class="col-sm-6">
+                                    <mat-form-field appearance="outline"> <mat-label>Variable</mat-label>
+                                        <input name="variable" type="text" matInput [(ngModel)]="variable"
+                                            placeholder="Enter name of the variable" />
+                                        <div *ngIf="!isVariableValid" class="text-danger">Please enter a
+                                            variable name
+                                        </div>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-6">
+                                    <mat-form-field appearance="outline"> <mat-label>Default
+                                            value</mat-label>
+                                        <input name="variable_value" type="text" matInput [(ngModel)]="variable_value"
+                                            placeholder="Enter default value" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="card-footer p-0" style="padding-top:25px !important;">
+                                <div class="text-end">
+                                    <button type="submit" mat-raised-button color="primary" class="me-2"
+                                        (click)="addURLVariable()">Add</button>
+                                    <button type="button" mat-raised-button
+                                        (click)="cancelURLVariable()">Cancel</button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="card-body">
+            <div>
+                <div class="">
+                    <div class="w-100">
+                        <table class="table table-bordered p-0 mb-0" id="">
+                            <tr>
+                                <th>Variable name</th>
+                                <th>Variable value</th>
+                            </tr>
+                            <tr *ngFor="let variable of variables;let i = index">
+                                <td>
+                                    <span>
+                                        <mat-form-field appearance="outline">
+                                            <input matInput type="text" name="var{{i}}" [(ngModel)]="variable.variables"
+                                                (change)="updateURLVariable(variable)" />
+                                        </mat-form-field>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span>
+                                        <mat-form-field appearance="outline">
+                                            <input type="text" matInput placeholder="Enter value" name="varvalue{{i}}"
+                                                [(ngModel)]="variable.value" (change)="updateURLVariable(variable)" />
+                                        </mat-form-field>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span>
+                                        <button type="button" class="btn btn-danger btn-sm btn-rounded"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" matTooltip="Delete"
+                                            data-bs-original-title="Delete"
+                                            (click)="openConfirmationDialog(variable, null)" tooltip="Delete"><i
+                                                class="bi bi-eraser"></i></button>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- VARIABLE DISPLAY ENDS -->
+    <div class="card" *ngFor="let item of page;let k = index">
+        <div class="card-header d-flex align-content-center justify-content-between position-relative">
+            <h3 class="mat-card-title mb-0">Page {{ item.page_order }}</h3>
+            <div>
+                <button type="button" class="btn btn-primary btn-sm" (click)="addVariable(item,k)"
+                    *ngIf="!item.isNewVariable"><i class="bi bi-plus"></i>Add variable</button>
+            </div>
+        </div>
+        <div class="p-4">
+            <div class="card addvariablestyle" *ngIf="item.isNewVariable">
+                <div class="card-header">
+                    <h3 class="card-title font-weight-bold text-dark">Add variables</h3>
+                </div>
+                <div class="card-body" *ngIf="item.isNewVariable">
+                    <div class="form-group row" *ngFor="let variable of item.variables;let vIndex = index">
+                        <div class="row" *ngIf="variable.is_active">
+                            <div class="col">
+                                <mat-form-field appearance="outline"> <mat-label>Variable</mat-label>
+                                    <input name="variable" type="text" matInput [(ngModel)]="variable.variables"
+                                        (change)="variableEdited(variable)" placeholder="Enter name of the variable" />
+                                </mat-form-field>
+                            </div>
+                            <div class="col">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Question</mat-label>
+                                    <mat-select name="question" placeholder="Select question"
+                                        (selectionChange)="changeQuestion(item?.questions,variable)"
+                                        [disabled]="variable.variables == ''"
+                                        [(ngModel)]="variable.question_identifier">
+                                        <mat-option [value]="question.question_identifier"
+                                            *ngFor="let question of item?.questions;let i = index">
+                                            {{question?.unique_question_num}}. {{ question?.question }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <mat-error *ngIf="item?.questions.length == 0">* No questions
+                                    added</mat-error>
+                            </div>
+                            <div class="col" *ngIf="selectedQuestion[variable.variable_identifier]?.question_type == 6 ||
+                                selectedQuestion[variable.variable_identifier]?.question_type == 5 ||
+                                selectedQuestion[variable.variable_identifier]?.question_type == 9">
+                                <!-- form question starts-->
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Form question</mat-label>
+                                    <mat-select name="formquestion" placeholder="Select form question"
+                                        [(ngModel)]="variable.form_identifier">
+                                        <mat-option [value]="form_question.form_identifier"
+                                            *ngFor="let form_question of selectedQuestion[variable.variable_identifier]?.form_questions;let i = index">
+                                            {{ form_question?.choices }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col" *ngIf="selectedQuestion[variable.variable_identifier]?.question_type == 6">
+                                <!-- matrix choice starts-->
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Choice</mat-label>
+                                    <mat-select name="choice" placeholder="Select form question"
+                                        [(ngModel)]="variable.matrix_option_identifier">
+                                        <mat-option [value]="matrix_option.matrix_option_identifier"
+                                            *ngFor="let matrix_option of selectedQuestion[variable.variable_identifier]?.matrix_option;let i = index">
+                                            {{ matrix_option?.matrix_options }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col align-content-center">
+                                <span class="mr-2"> <button type="button" class=" btn btn-danger btn-sm"
+                                        matTooltip="Delete" (click)="openConfirmationDialog(variable, item)"><i
+                                            class="bi bi-eraser"></i></button>
+                                </span>
+                                <span>
+                                    <button type="button" class="btn btn-success btn-sm"
+                                        (click)="addNewvariable(item,vIndex)" matTooltip="Add new"><i
+                                            class="bi bi-plus"></i></button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-end" *ngIf="item.isNewVariable">
+                    <button type="button" mat-raised-button color="primary" (click)="saveVariable(item)">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-end mb-2">
+        <button type="button" mat-raised-button color="primary" (click)="save()">Save</button>
+    </div>
+</div>

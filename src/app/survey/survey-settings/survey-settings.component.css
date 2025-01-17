@@ -1,0 +1,14 @@
+.card-header.d-flex {
+  justify-content: space-between;
+  align-items: center;
+}
+button.mat-menu-item {
+  min-width: 100px;
+}
+.red_color {
+  color: #d63939;
+}
+.page-break {
+  text-align: center;
+  background: #dbdbdb;
+}

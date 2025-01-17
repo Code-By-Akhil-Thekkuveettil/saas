@@ -1,0 +1,221 @@
+<div class="page-header">
+  <div class="page-block">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <div class="page-header-title">
+          <h2 class="m-b-10">{{ panelTitle }}</h2>
+        </div>
+        <ul class="breadcrumb">
+          <li class="breadcrumb-item"><a [routerLink]="['/panel-distribution']">Panel list</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page-body container card">
+  <div class="card-body">
+    <div class="row mt-4">
+      <div class="text-end">
+        <div class="search-hero d-flex align-items-center justify-content-center w-50">
+          <input class="form-control" type="text" name="search" [(ngModel)]="searchText" autocomplete="off"
+            placeholder="Search..">
+          <i class="fa fa-search ps-2"></i>
+        </div>
+        <button name="upload" mat-button (click)="uploadCSVPanel()" color="primary">
+          <mat-icon>publish</mat-icon> Upload member csv
+          file</button>
+        <button mat-button color="primary"><mat-icon>download</mat-icon>
+          <a href="assets/sample_panel_member_upload_file.csv" target="_blank"
+            download="sample_panel_member_upload_file.csv">Download a sample csv File</a>
+        </button>
+      </div>
+    </div>
+    <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">First name</th>
+            <th scope="col">Last name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone number</th>
+            <th scope="col">Department</th>
+            <th scope="col">Job type</th>
+            <th scope="col">NPI number</th>
+            <th class="text-center" scope="col">Status</th>
+            <th class="text-center" scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let member of membersList | filter:searchText;let i = index">
+            <th scope="row">{{i+1}}</th>
+            <td>
+              <mat-form-field appearance="fill">
+                <mat-label>First Name</mat-label>
+                <input type="text" name="fname" [(ngModel)]="member.first_name" matInput (change)="update(member)" />
+                <span class="text-danger" *ngIf="member.firstNameReq == false">Name is
+                  required</span>
+              </mat-form-field>
+            </td>
+            <td>
+              <mat-form-field appearance="fill">
+                <mat-label>Last name</mat-label>
+                <input matInput type="text" name="lname" [(ngModel)]="member.last_name" (change)="update(member)" />
+                <span class="text-danger" *ngIf="member.lastNameReq == false">Name is
+                  required</span></mat-form-field>
+            </td>
+            <td>
+              <mat-form-field appearance="fill">
+                <mat-label>Email</mat-label>
+                <input matInput type="text" name="email" [(ngModel)]="member.email" (change)="update(member)" />
+                <span class="text-danger" *ngIf="member.emailReq == false">Please enter a
+                  valid email id.</span>
+              </mat-form-field>
+            </td>
+            <td>
+              <div class="d-flex">
+                <mat-form-field appearance="fill">
+                  <mat-label>Country code</mat-label>
+                  <mat-select name="countryCode" id="" [(ngModel)]="member.mobile_code" (change)="update(member)">
+                    <mat-option value="">Select</mat-option>
+                    <mat-option *ngFor="let con of countryList" [value]="con.code">
+                      {{con.code }} {{con.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="fill" class="ms-2">
+                  <mat-label>Contact number</mat-label>
+                  <input matInput type="text" name="contact_number" [(ngModel)]="member.contact_number"
+                    (change)="update(member)" /></mat-form-field>
+              </div>
+              <span class="text-danger" *ngIf="member.phoneReq == false">Please enter a valid phone number.</span>
+            </td>
+            <td>
+              <mat-form-field appearance="fill">
+                <mat-label>Department</mat-label>
+                <mat-select name="department" id="" [(ngModel)]="member.department_name" (change)="update(member)">
+                  <mat-option value="">Select</mat-option>
+                  <mat-option *ngFor="let dept of department" [value]="dept.name">
+                    {{dept.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </td>
+            <td>
+              <mat-form-field appearance="fill">
+                <mat-label>Job type</mat-label>
+                <mat-select name="jobtype" id="" [(ngModel)]="member.job_type_name" (change)="update(member)">
+                  <mat-option value="">Select</mat-option>
+                  <mat-option *ngFor="let job of jobType" [value]="job.name">
+                    {{job.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </td>
+            <td>
+              <mat-form-field appearance="fill">
+                <mat-label>NPI</mat-label>
+                <input type="text" name="npi_number" [(ngModel)]="member.npi_number" matInput
+                  (change)="update(member)" />
+              </mat-form-field>
+            </td>
+            <td class="text-center">{{ member.subscription == 1 ? "Active": "Not Active" }}</td>
+            <td class="text-center">
+              <button mat-icon-button color="warn" (click)="deleteMember(member)"><mat-icon>delete</mat-icon></button>
+            </td>
+          </tr>
+          <tr *ngIf="isNewMember">
+            <th scope="row">{{memberCount+1}}</th>
+            <td>
+              <mat-form-field appearance="fill">
+                <mat-label>First name</mat-label>
+                <input type="text" name="fname" [(ngModel)]="newFirstName" matInput />
+                <div class="text-danger" *ngIf="!inValidForm && (newFirstName == '' || newFirstName == undefined)">
+                  Name
+                  is
+                  required</div>
+              </mat-form-field>
+            </td>
+            <td>
+              <mat-form-field appearance="fill">
+                <mat-label>Last name</mat-label>
+                <input matInput type="text" name="lname" [(ngModel)]="newLastName" />
+                <div class="text-danger" *ngIf="!inValidForm && (newLastName == '' || newLastName == undefined)">Name
+                  is
+                  required</div>
+              </mat-form-field>
+            </td>
+            <td>
+              <mat-form-field appearance="fill">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" name="email" [(ngModel)]="newEmail" />
+                <div class="text-danger" *ngIf="!inValidForm && (newEmail == '' || newEmail == undefined)">Email is
+                  required
+                </div>
+                <div class="text-danger" *ngIf="!emailValid">Please enter a valid email</div>
+              </mat-form-field>
+            </td>
+            <td>
+              <div class="d-flex">
+                <mat-form-field appearance="fill">
+                  <mat-label>Country code</mat-label>
+                  <mat-select name="countryCode" id="" [(ngModel)]="newPhoneCode">
+                    <mat-option value="">Select</mat-option>
+                    <mat-option *ngFor="let con of countryList" [value]="con.id">
+                      {{con.code }} {{con.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="fill" class="ms-2">
+                  <mat-label>Phone number</mat-label>
+                  <input matInput type="number" name="phone" [(ngModel)]="newPhone" />
+                </mat-form-field>
+              </div>
+              <div class="text-danger" *ngIf="!phoneValid">Please enter a valid phone number</div>
+            </td>
+            <td>
+              <mat-form-field appearance="fill">
+                <mat-label>Department</mat-label>
+                <mat-select name="dept" id="" [(ngModel)]="newDepartment">
+                  <mat-option value="">Select</mat-option>
+                  <mat-option *ngFor="let dept of department" [value]="dept.name">
+                    {{dept.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </td>
+            <td>
+              <mat-form-field appearance="fill">
+                <mat-label>Job</mat-label>
+                <mat-select name="job" id="" [(ngModel)]="newJobType">
+                  <mat-option value="">Select</mat-option>
+                  <mat-option *ngFor="let job of jobType" [value]="job.name">
+                    {{job.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </td>
+            <td>
+              <mat-form-field appearance="fill">
+                <mat-label>NPI</mat-label>
+                <input type="text" matInput="npi" [(ngModel)]="newNpiNumber" />
+              </mat-form-field>
+            </td>
+            <td></td>
+            <td class="text-center">
+              <button mat-icon-button><mat-icon color="warn" (click)="deleteNewMember()"
+                  matTooltip="Delete">delete</mat-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="text-end mt-2">
+      <button type="button" mat-raised-button color="primary" class="me-2" name="add" (click)="addNewMember()">Add new
+        member</button>
+      <button type="button" mat-raised-button color="primary" class="ml-2" name="save" (click)="save()">Save</button>
+    </div>
+  </div>
+</div>

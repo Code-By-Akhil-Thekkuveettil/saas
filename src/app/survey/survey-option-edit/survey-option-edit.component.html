@@ -1,0 +1,271 @@
+<div mat-dialog-title class="d-flex justify-content-between m-0">
+  <h3>Edit option</h3>
+  <button type="button" class="btn btn-close" aria-label="Close" (click)="closeDialog()"></button>
+</div>
+<div mat-dialog-content>
+  <div class="mt-2">
+    <div class="row">
+      <mat-label> Option </mat-label>
+      <div class="d-flex align-items-center">
+        <mat-form-field appearance="fill">
+          <textarea [(ngModel)]="option.choices" matInput></textarea>
+        </mat-form-field>
+        <button mat-icon-button title="Edit in text editor" (click)="editTextEditor(option?.choices,'choice')"
+          class='ms-2' style='color: #1e293b'>
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+    </div>
+    <!-- Header -->
+    <div class="form-group row mt-2" *ngIf="question_type == 5 || question_type == 6 || question_type == 9">
+      <div class="col-sm-3 col-form-label text-dark">
+        <mat-label>Row header</mat-label>
+      </div>
+      <div class="d-flex align-items-center"> <mat-form-field appearance="fill">
+          <input matInput type="text" name="header" [(ngModel)]="option.header" />
+        </mat-form-field>
+        <button mat-icon-button title="Edit in text editor" (click)="editTextEditor(option?.header,'header')"
+          class='ms-2' style='color: #1e293b'>
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="row mt-4" *ngIf="!(question_type == 2 || question_type == 3 || question_type == 4)">
+      <div>
+        <mat-slide-toggle [checked]="option.required_status ? true : false" [labelPosition]="'before'"
+          (change)="changeRequired($event)"> Is
+          Required?
+        </mat-slide-toggle>
+      </div>
+    </div>
+
+    <!-- Shuffle order -->
+    <div class="form-group row" *ngIf="question_type == 2 || question_type == 3 || question_type == 6">
+      <span class="col-sm-3 col-form-label text-dark">Shuffle order</span>
+      <div class="col-sm-9">
+        <div class="form-check form-switch pt-2 pb-2">
+          <input class="form-check-input cursor-pointer" type="checkbox" [(ngModel)]="option.is_shuffle"
+            name="is_shuffle" [checked]="option.is_shuffle">
+        </div>
+      </div>
+    </div>
+    <div class="mt-4 mb-2" *ngIf="question_type == 5">
+      <mat-label>Question type</mat-label>
+      <mat-form-field appearance="fill">
+        <mat-select name="operator" placeholder="Select" [(ngModel)]="option.question_type" matInput
+          (selectionChange)="changeQuestionType()">
+          <mat-option [value]="1">Text</mat-option>
+          <mat-option [value]="4">Drop down</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="row mt-2" *ngIf="option?.question_type == 4">
+      <span>Options:</span>
+      <div *ngFor="let item of optionsList; let i = index" class="mt-2 mb-2 d-flex align-items-center">
+        <mat-form-field appearance="fill">
+          <input type="text" class="w-50 d-inline" name="option{{ i }}" [(ngModel)]="item.choices" matInput
+            (change)="updateFormOptions(item)" />
+        </mat-form-field>
+        <button mat-icon-button color="warn" (click)="deleteOption(item)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+      <div class="action row">
+        <div class="col-sm-6">
+          <button mat-button color="primary" (click)="addOption()">Add option</button>
+        </div>
+        <div class="col-sm-6">
+          <button mat-button color="primary" (click)="addMultipleOptions()">Add
+            multiple options</button>
+        </div>
+      </div>
+      <div class="multiple_options row card p-2" *ngIf="isMultipleOptions">
+        <mat-form-field appearance="fill" class="mb-2 mt-2">
+          <textarea matInput [(ngModel)]="multipleOptionText" name="multiple_options"
+            placeholder="Enter text here"></textarea>
+        </mat-form-field>
+        <mat-checkbox [(ngModel)]="remove_option" (change)="onCheckboxChange($event)">
+          Remove existing
+          options</mat-checkbox>
+        <div class="d-flex justify-content-end">
+          <button mat-raised-button color="primary" [disabled]="!multipleOptionText"
+            (click)="multipleOptionsConvertionForm()">Add</button>
+          <button mat-raised-button (click)="addmultipleConvertionCancel()">Cancel</button>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2 w-100" *ngIf="question_type != 5 && question_type !== 3">
+      <mat-label for="" class="d-block">Special settings:</mat-label>
+      <mat-form-field appearance="fill" class="w-50">
+        <mat-select name="special_settings" placeholder="Select" [(ngModel)]="selectedSettings">
+          <mat-option [value]="1">Exclusive</mat-option>
+          <mat-option [value]="2">All of the above</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="mt-2 mb-2">
+      <div *ngIf="question_type == 2 || question_type == 3 || question_type == 4">
+        <mat-slide-toggle [checked]="option.default_option ? true : false" [labelPosition]="'before'"
+          [(ngModel)]="option.default_option"> Set as default
+        </mat-slide-toggle>
+      </div>
+    </div>
+  </div>
+  <div>
+    <h5 class="mt-2">Validation</h5>
+    <div class="row mt-2 w-100" *ngIf="(question_type == 5 || question_type == 9)||
+    (question_type == 6  && ( matrix_question_type != 2 && matrix_question_type != 3))">
+      <mat-label>Answer format</mat-label>
+      <mat-form-field appearance="fill" class="w-50">
+        <mat-select name="operator" placeholder="Select" [(ngModel)]="validation_field.id"
+          [disabled]="question_type == 9 || matrix_question_type == 9" (selectionChange)="answerValidation()">
+          <mat-option [value]="item.id" *ngFor="let item of answerFormat;let i = index">
+            {{ item.operator }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="date-valid" *ngIf="validation_field?.id == 3">
+        <div class="row mb-2 mt-2">
+          <mat-label class="col">Date format</mat-label>
+          <mat-radio-group class="tp-radio-group" aria-label="Select an option" [(ngModel)]="validation_field.value">
+            <mat-radio-button class="tp-radio-button" value="MM/DD/YYYY">MM/DD/YYYY</mat-radio-button>
+            <mat-radio-button class="tp-radio-button" value="DD/MM/YYYY">DD/MM/YYYY</mat-radio-button>
+            <mat-radio-button class="tp-radio-button" value="YYYY/MM/DD">YYYY/MM/DD</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+      <div class="regex-valid" *ngIf="validation_field?.id == 6">
+        <div class="row mb-2 mt-2">
+          <mat-label class="col">Regex</mat-label>
+          <mat-form-field appearance="fill" class="w-50">
+            <input type="text" name="regex" [(ngModel)]="validation_field.value" matInput />
+          </mat-form-field>
+        </div>
+      </div>
+      <div *ngIf="validation_field?.id">
+        <div class="row mb-2 mt-2">
+          <mat-label class="col">Validation message</mat-label>
+          <mat-form-field appearance="fill" class="w-50">
+            <input type="text" name="message" [(ngModel)]="validation_field.message" matInput />
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="row mt-2 w-100" *ngFor="let item of validationTypes;let i = index">
+        <div *ngIf="item.show">
+          <div class="row mb-2">
+            <mat-slide-toggle [checked]="item.is_active" [labelPosition]="'before'" [(ngModel)]="item.is_active">
+              {{item.operator}}
+            </mat-slide-toggle>
+          </div>
+          <div *ngIf="item.is_active">
+            <div class="row mb-2">
+              <mat-label class="w-50">Min value</mat-label>
+              <mat-form-field appearance="fill" class="w-50">
+                <input class="col" name="min" [(ngModel)]="item.min" matInput type="number" />
+              </mat-form-field>
+            </div>
+            <div class="row mb-2">
+              <mat-label class="w-50">Max value</mat-label>
+              <mat-form-field appearance="fill" class="w-50">
+                <input class="col" name="max" [(ngModel)]="item.max" matInput type="number" />
+              </mat-form-field>
+            </div>
+            <div class="row mb-2">
+              <mat-label class="w-50">Validation message</mat-label>
+              <mat-form-field appearance="fill" class="w-50">
+                <input type="text" name="custom_validation_message" [(ngModel)]="item.message" matInput />
+              </mat-form-field>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mt-2">
+    <mat-divider></mat-divider>
+    <h5 class="mt-2">Text entry</h5>
+    <div class="mt-2">
+      <mat-slide-toggle [checked]="option.text_entry ? true : false" [labelPosition]="'before'"
+        [(ngModel)]="option.text_entry"> Allow Text Entry
+      </mat-slide-toggle>
+    </div>
+    <div class="mt-4 mb-2" *ngIf="option?.text_entry">
+      <h5>Text entry validation</h5>
+      <div class="mt-2">
+        <mat-slide-toggle [checked]="option.is_required_text_entry ? true : false" [labelPosition]="'before'"
+          [(ngModel)]="option.is_required_text_entry">Is required?
+        </mat-slide-toggle>
+      </div>
+      <!--    question_type == 5 || 
+  (question_type == 6 && (matrix_question_type == 1 || matrix_question_type == 7) -->
+
+      <div class="row mt-2 w-100">
+        <mat-label>Answer format</mat-label>
+        <mat-form-field appearance="fill" class="w-50">
+          <mat-select name="operator" placeholder="Select" [(ngModel)]="selectedValidation.id"
+            (selectionChange)="textEntryValidation()">
+            <mat-option [value]="item.id" *ngFor="let item of textEntryAnswerFormat;let i = index">
+              {{ item.operator }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div class="date-valid" *ngIf="selectedValidation?.id == 3">
+          <div class="row mb-2 mt-2">
+            <mat-label class="col">Date format</mat-label>
+            <mat-radio-group class="tp-radio-group" aria-label="Select an option" [(ngModel)]="validation_field.value">
+              <mat-radio-button class="tp-radio-button" value="MM/DD/YYYY">MM/DD/YYYY</mat-radio-button>
+              <mat-radio-button class="tp-radio-button" value="DD/MM/YYYY">DD/MM/YYYY</mat-radio-button>
+              <mat-radio-button class="tp-radio-button" value="YYYY/MM/DD">YYYY/MM/DD</mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+        <div class="regex-valid" *ngIf="selectedValidation?.id == 6">
+          <div class="row mb-2 mt-2">
+            <mat-label class="col">Regex</mat-label>
+            <mat-form-field appearance="fill" class="w-50">
+              <input type="text" name="regex" [(ngModel)]="validation_field.value" matInput />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="row mt-2 w-100" *ngFor="let item of textEntryvalidationTypes;let i = index">
+          <div *ngIf="item.show">
+            <div class="row mb-2">
+              <mat-slide-toggle [checked]="item.is_active" [labelPosition]="'before'" [(ngModel)]="item.is_active">
+                {{item.operator}}
+              </mat-slide-toggle>
+            </div>
+            <div *ngIf="item.is_active">
+              <div class="row mb-2">
+                <mat-label class="w-50">Min value</mat-label>
+                <mat-form-field appearance="fill" class="w-50">
+                  <input class="col" name="min" [(ngModel)]="item.min" matInput type="number" />
+                </mat-form-field>
+              </div>
+              <div class="row mb-2">
+                <mat-label class="w-50">Max value</mat-label>
+                <mat-form-field appearance="fill" class="w-50">
+                  <input class="col" name="max" [(ngModel)]="item.max" matInput type="number" />
+                </mat-form-field>
+              </div>
+              <div class="row mb-2">
+                <mat-label class="w-50">Validation message</mat-label>
+                <mat-form-field appearance="fill" class="w-50">
+                  <input type="text" name="custom_validation_message" [(ngModel)]="item.message" matInput />
+                </mat-form-field>
+              </div>
+            </div>
+            <mat-divider></mat-divider>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions align="end">
+  <button type="submit" mat-raised-button color="primary" (click)="add()">Save</button>
+</div>

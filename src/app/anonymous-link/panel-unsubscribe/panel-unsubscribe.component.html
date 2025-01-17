@@ -1,0 +1,14 @@
+<div class="container">
+    <div class="card">
+        <div class="card-body text-center mt-4 mb-4" *ngIf="!submitted">
+            <h1 class="mb-4">We are sorry to see you go!</h1>
+            <h3 class="mb-4">Please click on the below button to confirm.</h3>
+            <button type="button" mat-raised-button color="primary" name="confirm"
+                (click)="confirm()">Unsubscribe</button>
+        </div>
+        <div class="card-body text-center mt-4 mb-4" *ngIf="submitted">
+            <h1 class="mb-4 text-success">Successfully unsubscribed</h1>
+
+        </div>
+    </div>
+</div>

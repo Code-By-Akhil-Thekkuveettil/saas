@@ -1,0 +1,359 @@
+<div mat-dialog-title>Preview
+    <button type="button" class="btn btn-close" style="float: right;" aria-label="Close" (click)="closeDialog()"
+        matTooltip="Close"></button>
+</div>
+<div>
+    <div class="row" id="q_{{question?.question_identifier}}">
+        <div>
+            <span class="mb-2 question_text" [innerHTML]="question.question | safeHtml"></span>
+            <span class="required" *ngIf="question.required_status == 1">*</span>
+            <div *ngIf="question?.question_type == 1" class="ml-3 textbox">
+                <div class="w-full">
+                    <mat-label>{{question?.custom_placeholder}}</mat-label>
+                    <input type="text" [(ngModel)]="question.answer" name="answer" class="inputAnswer inputType w-50"
+                        id="answer_{{question?.question_identifier}}" (change)="showValue(question)" />
+                </div>
+            </div>
+            <!-- Text Area START -->
+            <div *ngIf="question?.question_type == 7" class="ml-3 qt_textbox w-full" id="qttextbox">
+                <div class="w-100">
+                    <textarea [(ngModel)]="question.answer" name="answer" class="inputAnswer inputTextArea w-50 p-1"
+                        id="answer_{{question?.question_identifier}}"></textarea>
+                </div>
+            </div>
+            <!-- Text Area END -->
+            <!-- Radio Button START -->
+            <div *ngIf="question?.question_type == 3" class="ml-3 qt_radiobtn" id="qtradiobtn">
+                <ul class="choices">
+                    <li class="form-check option_text choice" *ngFor="let data of question.option;let j = index">
+                        <div class="radio_choice">
+                            <input class="form-check-input inputAnswer" type="radio" name="answer{{j}}"
+                                id="option_{{j}}_{{data?.option_identifier}}" [(ngModel)]="question.answer"
+                                [value]="data.option_identifier" (change)="showValue(question)">
+                            <label class="form-check-label" for="option_{{j}}_{{data?.option_identifier}}"
+                                [innerHTML]="data.choices | safeHtml">
+                            </label>
+                        </div>
+                        <div *ngIf="data.text_entry == 1" class="w-50 mt-2">
+                            <input type="text" [(ngModel)]="data.text_entry_value" (change)="showValue(question)"
+                                class="inputTextEntry" name="option_txt_{{data?.option_identifier}}"
+                                id="option_txt_{{data?.option_identifier}}" />
+                            <span class="required_textentry" *ngIf="data.is_required_text_entry == 1">*</span>
+                            <!-- Validation message START -->
+                            <div *ngIf="data.valid == false" class="validaion_msg" id="validationmsg">
+                                <!-- dynamic validation START -->
+                                <div *ngFor="let validation of data?.validation_data">
+                                    <div *ngIf="validation.isValid == false" class="text-danger error_msg w-full">
+                                        {{validation.message || 'Please enter valid answer'}}
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Validation message END -->
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- Radio Button END -->
+            <!-- Check Box START -->
+            <ul *ngIf="question?.question_type == 2" class="ml-6 qa_checkbox choices" id="qacheckbox">
+                <li class="list-group-item border-0 option_text p-2 d-flex align-items-center choice"
+                    style="width: 100%;" *ngFor="let data of question.option;let j = index">
+                    <mat-checkbox [(ngModel)]="data.checked" value="{{data.choices}}" class="inputAnswer"
+                        id="option_{{data?.option_identifier}}" name="answerOptions{{j}}"
+                        (change)="showValue(question)">
+                        <div [innerHTML]="data.choices | safeHtml"></div>
+                    </mat-checkbox>
+                    <div *ngIf="data.text_entry == 1" class="w-50 ms-2">
+                        <input type="text" [(ngModel)]="data.text_entry_value" class="inputTextEntry"
+                            name="option_txt_{{data?.option_identifier}}" id="option_txt_{{data?.option_identifier}}" />
+                        <span class="required_textentry" *ngIf="data.is_required_text_entry == 1">*</span>
+                        <!-- Validation message START -->
+                        <div *ngIf="data.valid == false" class="validaion_msg" id="validationmsg">
+                            <!-- dynamic validation START -->
+                            <div *ngFor="let validation of data?.validation_data">
+                                <div *ngIf="validation.validation_on == 4 && validation.isValid == false"
+                                    class="text-danger error_msg w-full">
+                                    {{validation.message || 'Please enter valid answer'}}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Validation message END -->
+                    </div>
+                </li>
+
+            </ul>
+            <!-- Radio Button END -->
+            <!-- Drop Down START -->
+            <div *ngIf="question?.question_type == 4" class="ml-3 qa_dropdown" id="qadropdown">
+                <div class="border-dark w-50">
+                    <span>{{question?.custom_placeholder}}</span>
+                    <select name="optn" placeholder="Select option" class="form-control inputAnswer inputType"
+                        *ngIf="question.option.length > 0" [(ngModel)]="question.answer"
+                        (onChange)="showValue(question)">
+                        <option class="option_text" [value]="items.option_identifier"
+                            id="option_{{items?.option_identifier}}" class="choices"
+                            *ngFor="let items of question.option">
+                            {{ items.choices }}
+                        </option>
+                    </select>
+                </div>
+                <div *ngFor="let item of question.option">
+                    <div *ngIf="question.answer == item.option_identifier && item.text_entry == 1" class="w-50 mt-2">
+                        <input type="text" [(ngModel)]="item.text_entry_value" class="inputTextEntry"
+                            name="option_txt_{{item?.option_identifier}}" id="option_txt_{{item?.option_identifier}}" />
+                        <span class="required_textentry" *ngIf="item.is_required_text_entry == 1">*</span>
+                        <!-- Validation message START -->
+                        <div *ngIf="item.valid == false" class="validaion_msg" id="validationmsg">
+                            <!-- dynamic validation START -->
+                            <div *ngFor="let validation of item?.validation_data">
+                                <div *ngIf="validation.isValid == false" class="text-danger error_msg w-full">
+                                    {{validation.message || 'Please enter valid answer'}}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Validation message END -->
+                    </div>
+                </div>
+            </div>
+            <!-- Drop Down END -->
+            <!-- Form START -->
+            <div *ngIf="question?.question_type == 5" class="ml-3 qa_form" id="qaform">
+                <ul class="choices">
+                    <li class="list-group-item option_text mb-3 d-flex align-items-center choice"
+                        *ngFor="let data of question.form_questions;let j = index">
+                        <div class="w-50">
+                            <span [innerHTML]="data.choices| safeHtml"></span>
+                            <span class="required" *ngIf="data.required_status">*</span>
+                            <div *ngIf="data.text_entry == 1" class="w-50 mt-2 row">
+                                <input type="text" [(ngModel)]="data.text_entry_value" (change)="showValue(question)"
+                                    class="inputTextEntry" name="option_txt_{{data?.option_identifier}}"
+                                    id="option_txt_{{data?.option_identifier}}" />
+                                <span class="required_textentry" *ngIf="data.is_required_text_entry == 1">*</span>
+                            </div>
+                        </div>
+                        <div class="w-50 ms-2">
+                            <div *ngIf="data.question_type != 4" class="border-dark w-full">
+                                <input type="text" [(ngModel)]="data.answer" class="inputAnswer inputType"
+                                    name="answerOptions{{j}}" id="option_{{data?.form_identifier}}"
+                                    (change)="showValue(question)" />
+                            </div>
+                            <!-- Validation message START -->
+                            <div class="form_validation" id="formvalidation" *ngIf="data.valid == false">
+                                <div *ngFor="let validation of data?.validation_data">
+                                    <div *ngIf="validation.isValid == false" class="text-danger error_msg w-full">
+                                        {{validation.message || 'Please enter valid answer'}}
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Validation message END -->
+                            <div class="w-100 p-0 m-0 border-dark answer_display" id="answerdisplay"
+                                *ngIf="data.question_type == 4">
+                                <select name="optn" placeholder="Select option" [(ngModel)]="data.answer"
+                                    (onChange)="showValue(question)" class="p-0 m-0 inputAnswer">
+                                    <option class="option_text" [value]="items.choices"
+                                        *ngFor="let items of data.form_options">{{
+                                        items.choices }}</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- Form END -->
+            <!-- Continuous Sum START -->
+            <div *ngIf="question?.question_type == 9" class="ml-3 qa_sum" id="qasum">
+                <ul class="d-flex form_questions"
+                    [ngStyle]="{'flex-direction': question.align_type == 1 ? 'row' :'column'}">
+                    <li class="list-group-item option_text d-flex align-items-center form_question mb-1"
+                        *ngFor="let data of question.form_questions;let j = index">
+                        <div class="w-50">
+                            <span [innerHTML]="data?.choices | safeHtml"></span>
+                            <span class="required" *ngIf="data.required_status">*</span>
+                            <div *ngIf="data.text_entry == 1" class="mt-2">
+                                <input type="text" [(ngModel)]="data.text_entry_value" (change)="showValue(question)"
+                                    class="inputTextEntry" name="option_txt_{{data?.option_identifier}}"
+                                    id="option_txt_{{data?.option_identifier}}" />
+                                <span class="required_textentry" *ngIf="data.is_required_text_entry == 1">*</span>
+                            </div>
+                        </div>
+                        <div class="w-50 ms-2">
+                            <div class="w-100">
+                                <input type="number" [(ngModel)]="data.answer" class="inputAnswer inputType"
+                                    name="answerOptions{{j}}" id="option_{{data?.form_identifier}}"
+                                    (change)="showValue(question)" />
+                                <!-- Validation message START -->
+                                <!-- dynamic validation START -->
+                                <div *ngFor="let validation of data?.validation_data">
+                                    <div *ngIf="validation.isValid == false" class="text-danger error_msg w-full">
+                                        {{validation.message || 'Please enter valid number'}}
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Validation message END -->
+                        </div>
+
+                    </li>
+                    <mat-divider class="mt-2"></mat-divider>
+                    <li class="list-group-item option_text d-flex mt-2 align-items-center list_count" id="listcount">
+                        <span class="w-50 fw-bolder">Total</span>
+                        <div class="w-50 text-start">
+                            <mat-label class="totalValue">{{total[question?.question_identifier]
+                                || 0}}</mat-label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- Continuous Sum END -->
+            <!-- Matrix START -->
+            <div *ngIf="question?.question_type == 6" class="ml-3 qa_matrix" id="qamatrix">
+                <table class="table table-bordered border">
+                    <tr class="table-dark">
+                        <th id=""><span></span></th>
+                        <th class="border-start border text-center option_text label_matrix_title matrix_option"
+                            id="labelmatrixtitle" *ngFor="let items of question.matrix_option;let m = index;">
+                            <span [innerHTML]="items?.matrix_options | safeHtml"
+                                style="white-space: break-spaces !important;"></span>
+                            <span class="required" *ngIf="items.required_status">*</span>
+                        </th>
+                    </tr>
+                    <tr *ngFor="let items of question.form_questions;let m = index;" class="form_questions">
+                        <th class="option_text_{{m}} form_question" id="">
+                            <span [innerHTML]="items?.choices | safeHtml"
+                                style="white-space: break-spaces !important;"></span>
+                            <span class="required" *ngIf="items.required_status">*</span>
+                            <div *ngIf="items.text_entry == 1">
+                                <div class="p-0 mat_input w-full" id="{{m}}">
+                                    <input type="text" class="inputTextEntry"
+                                        name="option_txt_{{items?.form_identifier}}"
+                                        id="option_txt_{{items?.form_identifier}}"
+                                        [(ngModel)]="items.text_entry_value" />
+                                    <span class="required_textentry" *ngIf="items.is_required_text_entry == 1">*</span>
+                                </div>
+                            </div>
+                        </th>
+                        <td class="border-start border text-center option_text matrix_option" id="matmatrixOption_{{j}}"
+                            *ngFor="let item of question.matrix_option;let j = index;">
+                            <div class="align-items-center">
+                                <!-- type- radiobutton -->
+                                <input class="mat_radio_button inputAnswer radio_button align-content-center"
+                                    *ngIf="question.matrix_question_type == null || question.matrix_question_type == 3"
+                                    type="radio" name="radio_{{m}}_{{j}}" value="{{ item.matrix_option_identifier }}"
+                                    [(ngModel)]="items.answer"
+                                    name="option_{{items?.form_identifier}}_{{item?.matrix_option_identifier}}"
+                                    id="option_{{items?.form_identifier}}_{{item?.matrix_option_identifier}}"
+                                    (change)="showValue(question)" />
+                                <!-- type- checkbox -->
+                                <mat-checkbox *ngIf="question.matrix_question_type == 2"
+                                    class="mat_checkbox inputAnswer" style="margin:auto" name="check_{{m}}_{{j}}"
+                                    value="{{ item.matrix_options }}"
+                                    id="option_{{items?.form_identifier}}_{{item?.matrix_option_identifier}}"
+                                    name="option_{{items?.form_identifier}}_{{item?.matrix_option_identifier}}"
+                                    [(ngModel)]="items.answers[item.matrix_option_identifier].checked"
+                                    (change)="showValue(question)"></mat-checkbox>
+                                <!-- type- textarea -->
+                                <div class="p-0 mat_textarea w-full" id="mattextarea_{{m}}_{{j}}"
+                                    *ngIf="question.matrix_question_type == 7">
+                                    <textarea type="text" name="radio_{{m}}_{{j}}" class="inputAnswer inputType"
+                                        [(ngModel)]="items.answers[item.matrix_option_identifier].answer"
+                                        id="option_{{items?.form_identifier}}_{{item?.matrix_option_identifier}}"
+                                        name="option_{{items?.form_identifier}}_{{item?.matrix_option_identifier}}"
+                                        value="{{ item.matrix_options }}" (change)="showValue(question)"></textarea>
+                                </div>
+                                <!-- type- textbox -->
+                                <div class="p-0 mat_textbox w-full" id="mattextbox_{{m}}_{{j}}"
+                                    *ngIf="question.matrix_question_type == 1">
+                                    <input type="text" class="inputAnswer inputType"
+                                        [(ngModel)]="items.answers[item.matrix_option_identifier].answer"
+                                        id="option_{{items?.form_identifier}}_{{item?.matrix_option_identifier}}"
+                                        name="text_{{m}}_{{j}}" value="{{ item.matrix_options }}"
+                                        (change)="showValue(question)" />
+                                </div>
+                                <!-- type- continuous sum -->
+                                <div class="p-0 mat_sum w-full" id="matsum_{{m}}_{{j}}"
+                                    *ngIf="question.matrix_question_type == 9">
+                                    <input type="number" class="inputAnswer inputType"
+                                        [(ngModel)]="items.answers[item.matrix_option_identifier].answer"
+                                        id="option_{{items?.form_identifier}}_{{item?.matrix_option_identifier}}"
+                                        name="sum_{{m}}_{{j}}" value="{{ item.matrix_options }}"
+                                        (change)="showValue(question)" />
+                                </div>
+                                <div *ngIf="item.text_entry == 1" class="ms-2">
+                                    <div class="p-0 mat_input d-flex" id="{{m}}">
+                                        <input type="text" class="inputTextEntry"
+                                            name="option_txt_{{item?.matrix_option_identifier}}{{m}}"
+                                            id="option_txt_{{item?.matrix_option_identifier}}{{m}}"
+                                            [(ngModel)]="items.answers[item.matrix_option_identifier].text_entry_value" />
+                                        <span class="required_textentry"
+                                            *ngIf="item.is_required_text_entry == 1">*</span>
+                                    </div>
+                                </div>
+                                <!-- dynamic validation START -->
+                                <div *ngFor="let validation of items?.validation_data">
+                                    <div *ngIf="validation.isValid == false" class="text-danger error_msg w-full">
+                                        {{validation.message || 'Please enter valid answer'}}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="question.matrix_question_type == 9" class="align-content-center mat_total_count"
+                        id="mattotalcount">
+                        <th id="">
+                            <span class="w-50 fw-bolder">Total</span>
+                        </th>
+                        <td *ngFor="let items of question.matrix_option;let i = index;"
+                            class="border-start border text-start option_text">
+                            <mat-label class="totalValue"
+                                id="matrixTotal">{{matrixTotal[question?.question_identifier][items?.matrix_option_identifier]
+                                || 0}}</mat-label>
+                        </td>
+                    </tr>
+                </table>
+
+
+            </div>
+            <!-- MatrixEND -->
+            <!-- Signature START -->
+            <div *ngIf="question?.question_type == 10" class="ml-3 signature_sec" id="signaturesec">
+                <app-signature-component id="answer_{{question?.question_identifier}}"
+                    class="w-full"></app-signature-component>
+            </div>
+            <!-- Signature END -->
+            <!-- VALIDATION MESSAGE START -->
+            <!-- required validation message START -->
+            <div *ngIf="!question.valid &&
+                !(question.question_type == 2 || question.question_type == 3) " class="text-danger error_msg w-full">
+                {{question.custom_validation_message ? question.custom_validation_message :
+                errMessage}}
+            </div>
+            <!-- required validation message END -->
+
+            <!-- dynamic validation START -->
+            <div *ngFor="let validation of question?.validation_data">
+                <div *ngIf="validation.isValid == false" class="text-danger error_msg w-full">
+                    {{validation.message || 'Please enter valid answer'}}
+                </div>
+            </div>
+            <!-- Unselected option validation message -->
+            <div *ngIf="question.question_type == 2 ||question.question_type == 3 " class="text-danger error_msg">
+                <div *ngIf="!question.valid && question.textEntryValidation"> You have entered
+                    a text into an unselected option. Please select the
+                    option
+                    or
+                    remove the text.</div>
+                <div *ngIf="!question.valid && !question.textEntryValidation" class="text-danger error_msg w-full">
+                    <span *ngIf="question.answer">Please enter text for selected option</span>
+                    <span *ngIf="!question.answer"> {{question.custom_validation_message ?
+                        question.custom_validation_message :
+                        errMessage}}</span>
+                </div>
+            </div>
+            <!-- option required validation -->
+            <div class="text-danger error_msg w-full" *ngIf="!question.valid && question.option_required_error">Please
+                provide an
+                answer to the option {{ question.option_required }}</div>
+            <!-- VALIDATION MESSAGE END -->
+        </div>
+    </div>
+</div>

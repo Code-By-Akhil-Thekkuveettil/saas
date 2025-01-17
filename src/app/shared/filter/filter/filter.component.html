@@ -1,0 +1,53 @@
+<div style="float: right;">
+  <button matTooltip="Close folter Modal" class="close" mat-button (click)="close(true)">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<h1 mat-dialog-title>Filter </h1>
+<mat-dialog-content>
+  <form [formGroup]="filterForm">
+    <div class="row m-2">
+      <div class="col-lg-6">
+        <div class="form-group mb-4">
+          <label class="col-form-label text-dark">Name</label>
+          <input type="text" formControlName="name" name="name" #myInput class="form-control" placeholder="">
+        </div>
+      </div>
+      <div class="col-lg-6 mb-4">
+        <div class="form-group">
+          <label class="col-form-label text-dark">Description</label>
+          <input cdkFocusInitial type="text" formControlName="description" name="description" #myInput
+            class="form-control" placeholder="">
+        </div>
+      </div>
+      <!-- <div class="col-lg-6">
+        <div class="form-group">
+          <label class="col-form-label text-dark">Created Date</label>
+          <mat-form-field>
+            <input matInput formControlName="created" [matDatepicker]="picker">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div> -->
+      <div class="col-lg-6">
+        <div class="form-group">
+          <label class="col-form-label text-dark">Status</label>
+          <select class="form-control dropdown" formControlName="is_closed">
+            <option [value]=false>Active</option>
+            <option [value]="true">Closed</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <div class="row">
+    <div class="text-center" style="margin-top: 2.1rem;">
+      <button type="submit" matTooltip="Close folter Modal" style="margin-right: 5px;" (click)="filter()"
+        class="btn btn-primary mr-2">Search</button>
+      <button type="button" matTooltip="Reset fields" class="ml-2 btn btn-light" (click)="reset()">Reset</button>
+    </div>
+  </div>
+</mat-dialog-actions>

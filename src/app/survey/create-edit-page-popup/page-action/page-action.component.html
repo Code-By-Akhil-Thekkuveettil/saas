@@ -1,0 +1,148 @@
+<!-- redirect links display -->
+<div class="mt-4 mb-4">
+    <mat-card-title>Redirect link</mat-card-title>
+    <div align="end" class="mt-2">
+        <button mat-raised-button color="primary" matTooltip="Add" (click)="addnewRedirect()">
+            + Add new redirection link
+        </button>
+    </div>
+    <mat-card class="mt-2 w-100 redirect" *ngFor="let redirect of redirectLinks;let i = index">
+        <mat-card-content class="align-items-center">
+            <div class="row mt-2">
+                <mat-form-field appearance="outline">
+                    <mat-label>Redirect link</mat-label>
+                    <input name="redirect" type="text" [(ngModel)]="redirect.redirect_urls" matInput
+                        (ngModelChange)="changeLink(redirect)">
+                    <mat-hint>https://www.google.com/</mat-hint>
+                </mat-form-field>
+                <mat-error *ngIf="redirect.redirect_urls && !urlValidation(redirect.redirect_urls)">Please enter valid
+                    URL</mat-error>
+            </div>
+            <div class="row mt-4">
+                <mat-slide-toggle [checked]="redirect.is_logic == 1 ? true : false" [(ngModel)]="redirect.is_logic"
+                    [labelPosition]="'before'" (change)="updateLogic(redirect)">
+                    Allow logic
+                </mat-slide-toggle>
+                <div class="" *ngIf="redirect.is_logic != 0">
+                    <div>
+                        <div class="row col align-content-center">
+                            <div class="col-sm-6 col-lg-6 mb-1 mr-1">
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <mat-label>Logic</mat-label>
+                                    <mat-select aria-label="Default select example"
+                                        [(ngModel)]="redirect.variable_identifier"
+                                        (selectionChange)="updateLogic(redirect)">
+                                        <mat-option [value]="item.variable_identifier"
+                                            *ngFor="let item of embeddedData;let i = index">
+                                            {{ item.variables }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-6 col-lg-6 mb-2 mr-1">
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <mat-label>Logic operator </mat-label>
+                                    <mat-select aria-label=" Default select example"
+                                        [(ngModel)]="redirect.logical_operators_type"
+                                        (selectionChange)="textOperatorUpdate(redirect)">
+                                        <mat-option [value]="item.id" *ngFor="let item of operators;let i = index">{{
+                                            item.operator }}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-6 col-lg-6 mb-2 mr-1" *ngIf="redirect.textFieldValid">
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <mat-label>Value</mat-label>
+                                    <input type="text" matInput name="value" [(ngModel)]="redirect.logic_value"
+                                        (change)="checkLogicValid(redirect)" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-divider></mat-divider>
+        <mat-card-footer class="mt-2">
+            <div align="end" class="p-2">
+                <button mat-icon-button color="warn" matTooltip="Delete"
+                    (click)="openConfirmationDialog('deleteRedirect', redirect)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+    <mat-card *ngIf="isnewRedirect" class="redirect w-100 mt-2">
+        <mat-card-content class="align-items-center">
+            <div class="row mt-2">
+                <mat-form-field appearance="outline">
+                    <mat-label>Redirect link</mat-label>
+                    <input name="redirect" type="text" [(ngModel)]="redirectLink.redirect_urls" matInput />
+                    <mat-hint>https://www.google.com/</mat-hint>
+                </mat-form-field>
+                <mat-error *ngIf="redirectLink.redirect_urls && !urlValidation(redirectLink.redirect_urls)">Please enter
+                    valid URL</mat-error>
+            </div>
+            <div class="row mt-4">
+                <mat-slide-toggle [checked]="redirectLink.is_logic == 1 ? true : false"
+                    [(ngModel)]="redirectLink.is_logic" [labelPosition]="'before'">
+                    Allow logic
+                </mat-slide-toggle>
+                <div class="" *ngIf="redirectLink.is_logic != 0">
+                    <div>
+                        <div class="row col align-content-center">
+                            <div class="col-sm-6 col-lg-6 mb-1 mr-1">
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <mat-label>Logic</mat-label>
+                                    <mat-select aria-label="Default select example"
+                                        [(ngModel)]="redirectLink.variable_identifier"
+                                        (selectionChange)="checkLogicValid(redirectLink)">
+                                        <mat-option [value]="item.variable_identifier"
+                                            *ngFor="let item of embeddedData;let i = index">
+                                            {{ item.variables }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-6 col-lg-6 mb-2 mr-1">
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <mat-label>Logic operator </mat-label>
+                                    <mat-select aria-label=" Default select example"
+                                        [(ngModel)]="redirectLink.logical_operators_type"
+                                        (selectionChange)="textOperatorUpdate(redirectLink)">
+                                        <mat-option [value]="item.id" *ngFor="let item of operators;let i = index">{{
+                                            item.operator }}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-6 col-lg-6 mb-2 mr-1" *ngIf="redirectLink.textFieldValid">
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <mat-label>Value</mat-label>
+                                    <input type="text" matInput name="value" [(ngModel)]="redirectLink.logic_value"
+                                        (change)="checkLogicValid(redirectLink)" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-divider></mat-divider>
+        <mat-card-footer class="mt-2">
+            <div align="end" class="p-2">
+                <button cdkFocusInitial type="submit" mat-raised-button color="primary" class="ms-2"
+                    [disabled]="!urlValidation(redirectLink.redirect_urls)" (click)="addRedirect()">
+                    Save </button>
+                <button mat-button color="warn" matTooltip="Delete" class="ms-2" (click)="cancelRedirect()">
+                    <mat-icon>delete</mat-icon>Cancel
+                </button>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+    <div align="end" class="mt-2" *ngIf="redirectLinks?.length > 0">
+        <button cdkFocusInitial type="submit" mat-raised-button color="primary" class="ms-2"
+            (click)="updateRedirectLink()">
+            Update </button>
+    </div>
+</div>
+<!-- DISPLAY REDIRECTS ENDS -->

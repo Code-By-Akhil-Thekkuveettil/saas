@@ -1,0 +1,117 @@
+<div mat-dialog-title class="d-flex justify-content-between">
+    <h3>Connect {{data.plugin_name =='sms-plugin' ? 'SMS' : 'Email' }} plugin</h3>
+    <button type="button" class="btn btn-close" aria-label="Close" (click)="closeDialog()"></button>
+</div>
+<div mat-dialog-content class="d-flex row">
+    <div class="card container mt-4">
+        <div class="card-body" *ngIf="data.plugin_name =='sms-plugin'">
+            <div class="sms-block">
+                <label for=""><b>SMS plugin credentials</b><i>(Twilio account credentials)</i></label>
+                <form class="card card-md" [formGroup]="smsForm" action="." method="post" autocomplete="off"
+                    (ngSubmit)="addSMS()">
+
+                    <div class="row mt-2">
+                        <div class="col-sm-4">
+                            <label for=""><b>Twilio account SID</b></label>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="password" name="twilio_account_sid" class="form-control"
+                                formControlName="twilio_account_sid" />
+                            <small class="form-text text-muted"
+                                *ngIf="smsForm.controls.twilio_account_sid.touched && smsForm.controls.twilio_account_sid.errors?.required">
+                                <p class="error">Please enter twilio account sid.</p>
+                            </small>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-sm-4">
+                            <label for=""><b>Twilio auth token</b></label>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="password" name="twilio_auth_token" class="form-control"
+                                formControlName="twilio_auth_token" />
+                            <small class="form-text text-muted"
+                                *ngIf="smsForm.controls.twilio_auth_token.touched && smsForm.controls.twilio_auth_token.errors?.required">
+                                <p class="error">Please enter twilio auth token.</p>
+                            </small>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-sm-4">
+                            <label for=""><b>Twilio from mobile number</b></label>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="password" name="twilio_from_mob_number" class="form-control"
+                                formControlName="twilio_from_mob_number" />
+                            <small class="form-text text-muted"
+                                *ngIf="smsForm.controls.twilio_from_mob_number.touched && smsForm.controls.twilio_from_mob_number.errors?.required">
+                                <p class="error">Please enter twilio from mobile number.</p>
+                            </small>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="text-end">
+                            <button type="submit" name="smsAdd" mat-raised-button color="primary"
+                                [disabled]="!smsForm.valid">{{data.plugin_connection_data == null ? 'Add' :
+                                'Update'}}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card-body" *ngIf="data.plugin_name =='email-plugin'">
+            <div class="email-block">
+                <label for=""><b>Email plugin credentials</b><i>(Sengrid account credentials)</i></label>
+
+                <form class="card card-md" [formGroup]="emailForm" action="." method="post" autocomplete="off"
+                    (ngSubmit)="addEmail()">
+                    <div class="form-group row mt-4">
+                        <div class="col-sm-4">
+                            <span class="col-form-label">From name</span>
+                        </div>
+                        <div class="col-sm-8">
+                            <mat-form-field style="width: 100%;" appearance="fill">
+                                <input matInput type="text" name="survey_title" formControlName="from_name" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="form-group row mt-4">
+                        <div class="col-sm-4">
+                            <span class="col-form-label">From email</span>
+                        </div>
+                        <div class="col-sm-8">
+                            <mat-form-field style="width: 100%;" appearance="fill">
+                                <input matInput type="text" name="survey_title" formControlName="from_email" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-sm-4">
+                            <label for=""><b>Sendgrid api key</b></label>
+                        </div>
+                        <div class="col-sm-8">
+                            <mat-form-field style="width: 100%;" appearance="fill">
+                                <input type="password" name="sendgrid_api_key" class="form-control" matInput
+                                    formControlName="sendgrid_api_key" />
+                                <small class="form-text text-muted"
+                                    *ngIf="emailForm.controls.sendgrid_api_key.touched && emailForm.controls.sendgrid_api_key.errors?.required">
+                                    <p class="error">Please enter sengrid api key.</p>
+                                </small>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="text-end">
+                            <button type="submit" name="emailAdd" mat-raised-button color="primary"
+                                [disabled]="!emailForm.valid">{{data.plugin_connection_data == null ? 'Add' :
+                                'Update'}}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card-body" *ngIf="data.plugin_name =='google analytics'">
+            <app-add-details-ga></app-add-details-ga>
+        </div>
+    </div>

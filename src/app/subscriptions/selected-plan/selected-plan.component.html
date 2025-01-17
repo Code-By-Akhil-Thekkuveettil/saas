@@ -1,0 +1,81 @@
+<div class="content-page">
+    <!-- Start content -->
+    <div class="content">
+        <div class="container-fluid">
+            <!-- <div class="page-title-box">
+                <div class="row mb-4 mt-4">
+                    <div class="col-sm-10">
+                        <h1 class="page-title text-dark">Subscription</h1>
+                    </div>
+                </div>
+            </div> -->
+            <div class="page-header mb-3">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                                <h2 class="m-0">Subscription</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- end page-title -->
+            <div class="">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <h5 class="card-title col">Plan Details</h5>
+                        <div>
+                            <button mat-raised-button color="primary" (click)="showInvoices()"><i
+                                    class="bi bi-receipt"></i> View Invoices</button>
+                            <button mat-raised-button color="primary" class="ms-2" (click)="cancelSubscription()"> <i
+                                    class="bi bi-x-lg"></i> Cancel Plan</button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body container">
+                        <div class="row">
+                            <!-- <table class="table table-striped table-hover">
+                            <thead class="table-light">
+                                <tr> -->
+                            <div class="col-md-4">
+
+                                <div class="form-controll">Product name</div>
+                                <div class="form-controll">Interval</div>
+                                <div class="form-controll">Amount</div>
+                                <div class="form-controll">Start Date</div>
+                                <div class="form-controll">Renewal Date</div>
+                                <div class="form-controll">Status</div>
+                            </div>
+                            <!-- </tr>
+                            </thead>
+                            <tbody> -->
+                            <div class="col-md-8">
+                                <ng-container *ngFor="let item of subscription">
+                                    <div class="form-controll">{{item.product_name}}</div>
+                                    <div class="form-controll">{{item.recurring_interval}}</div>
+                                    <div class="form-controll">{{item.unit_amount |currency}}</div>
+                                    <div class="form-controll">{{item.period_start}}</div>
+                                    <div class="form-controll">{{item.period_end}}</div>
+                                    <div class="form-controll"> <span
+                                            *ngIf="item.subscription_status =='incomplete'">please confirm subscription
+                                            payment otherwise will be auto cancelled within 24 hrs</span>
+                                        <span *ngIf="item.subscription_status =='incomplete cancel'">Subscription auto
+                                            cancelled due to payment confirmation failure, please cancel current
+                                            subscription then re-subscribe </span>
+                                        <span *ngIf="item.subscription_status =='active'">Active</span>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <!-- </tbody>
+                        </table> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- container-fluid -->
+    </div>
+    <!-- content -->
+</div>

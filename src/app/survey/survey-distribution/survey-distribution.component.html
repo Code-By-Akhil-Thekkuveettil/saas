@@ -1,0 +1,106 @@
+<!-- [ breadcrumb ] start -->
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <div class="page-header-title">
+                    <h2 class="m-b-10">{{surveyTitle}}</h2>
+                </div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a [routerLink]="['/survey']">Survey list</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a [routerLink]="['/survey/questions/', surveyIdentifier]">
+                            Survey view</a>
+                    </li>
+                    <li class="breadcrumb-item">Distribution</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-body">
+    <div class="card mt-4">
+        <div class="card-body">
+            <b>Copy the below survey anonymous link:</b>
+            <div class="row align-items-center mt-1">
+                <div class="col-sm-9">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Survey link</mat-label>
+                        <input matInput type="text" name="link" [(ngModel)]="link" #surveyInput
+                            (click)="surveyInput.select()" />
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <button mat-raised-button [cdkCopyToClipboard]="link" type="button" class="" name="copy"
+                        [disabled]="link == null" color="primary">
+                        Copy
+                    </button>
+                </div>
+            </div>
+            <div class="row mt-4 text-success">
+                <span style="font-style: italic;font-weight: bold;" *ngIf="sharedPanels.length > 0">Already
+                    shared the link to panels:
+                    <span *ngFor="let panel of sharedPanels;let i=index"><span *ngIf="i > 0">,</span>{{
+                        panel.panel_title }}</span>
+                </span>
+            </div>
+            <div class="row mt-4">
+                <p>More options:</p>
+                <p><a class="cursor-pointer" (click)="emailShare()">Click here to share the link via
+                        email</a>
+                </p>
+
+                <div class="email-block" *ngIf="isEmailShare">
+                    <span>Select panel list</span>
+                    <div class="row mt-2 align-items-center">
+                        <div class="col-sm-9">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Select multiple options</mat-label>
+                                <mat-select [(ngModel)]="selectedItems" multiple>
+                                    <mat-option *ngFor="let option of panel" [value]="option.id">{{ option.title
+                                        }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <span *ngIf="panelSelectReq" class="text-danger">Please select one or more
+                                panel.</span>
+                        </div>
+                        <div class="col">
+                            <button type="button" mat-raised-button color="primary" name="share"
+                                (click)="share()">Share</button>
+                        </div>
+                    </div>
+                    <div class="text-end">
+
+                    </div>
+
+                </div>
+                <span *ngIf="isSMSConnected">
+                    <p><a class="cursor-pointer" (click)="smsShare()">Click here to share the link via
+                            SMS</a>
+                    </p>
+                    <div class="email-block" *ngIf="isSMSShare">
+                        <span>Select panel list</span>
+                        <div>
+                            <mat-form-field appearance="outline">
+                                <mat-label>Select multiple options</mat-label>
+                                <mat-select [(ngModel)]="selectedItemsSMS" multiple>
+                                    <mat-option *ngFor="let option of panel" [value]="option.id">{{
+                                        option.title
+                                        }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <span *ngIf="panelSelectReq" class="text-danger">Please select one or more
+                                panel.</span>
+                            <button type="button" name="share" mat-raised-button color="primary"
+                                (click)="shareSMS()">Share</button>
+                        </div>
+                        <div class="text-end">
+                        </div>
+                    </div>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+label.col-form-label.col-sm-4.text-sm-left.surveyview {
+  font-size: 0.89rem;
+  color: #1f2123;
+  font-weight: 500;
+}
+#table-scroll th,
+td {
+  white-space: nowrap;
+  border-right: 1px solid;
+  border-color: #eeeeee;
+}
+.mat-table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+}
+.badge {
+  background-color: lightgrey;
+  color: white;
+  padding: 4px 8px;
+  text-align: center;
+  border-radius: 15px;
+}
+.Completed,
+.live {
+  background-color: green;
+}
+.Partial {
+  background-color: orange;
+}
+.Disqualified {
+  background-color: gray;
+}
+.truncate-text {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 250px;
+  min-width: 100px;
+  cursor: pointer;
+}

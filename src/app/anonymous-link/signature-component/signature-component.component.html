@@ -1,0 +1,14 @@
+<div class="card-body">
+    <canvas #sigPad (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)" class="signature"
+        style="border:1px solid"></canvas>
+    <div class="d-flex mb-2" align="end">
+        <button mat-stroked-button (click)="clear()">
+            Clear
+        </button>
+    </div>
+    <div style="flex-direction: column;" class="w-100">
+        <div class="border-dark mb-2">
+            <input type="text" [(ngModel)]="name" placeholder="Name" name="name" class="inputType" (change)="save()" />
+        </div>
+    </div>
+</div>

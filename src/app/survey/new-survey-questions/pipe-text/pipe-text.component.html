@@ -1,0 +1,47 @@
+<button mat-menu-item [matMenuTriggerFor]="listmenu" color="primary">
+  <span style="color:#ae3ec9"> Insert pipe text</span>
+</button>
+<mat-menu #listmenu yPosition="above">
+  <button mat-menu-item [matMenuTriggerFor]="qmenu" (click)="showPipe()"> Survey question </button>
+  <button mat-menu-item [matMenuTriggerFor]="emenu" (click)="getAllVariables()"> Embedded data </button>
+</mat-menu>
+<mat-menu #qmenu="matMenu">
+  <div *ngIf="qLoading" class="text-center"> <mat-icon class="loader-icon">autorenew</mat-icon></div>
+  <div *ngIf="!qLoading">
+    <div *ngFor="let p_question of questions">
+      <button mat-menu-item [matMenuTriggerFor]="submenu"> {{p_question?.unique_question_num}}.{{
+        p_question.question }}
+      </button>
+      <mat-menu #submenu>
+        <div *ngFor="let node of p_question.pipeTextOptions">
+          <!-- No child node -->
+          <div *ngIf="!node?.pipeOptions || node?.pipeOptions?.length === 0">
+            <button mat-menu-item (click)="addPipe(p_question, node)">{{ node?.name }}</button>
+          </div>
+          <!-- Child node -->
+          <div *ngIf="p_question.question_type == 5">
+          </div>
+          <div *ngIf="node?.pipeOptions || node?.pipeOptions?.length > 0">
+            <button mat-menu-item [matMenuTriggerFor]="subsubmenu"> {{node?.name }} </button>
+            <mat-menu #subsubmenu>
+              <button mat-menu-item *ngFor="let subnode of node?.pipeOptions" (click)="addPipe(p_question, subnode)">
+                {{ subnode?.name }}
+              </button>
+            </mat-menu>
+          </div>
+        </div>
+      </mat-menu>
+    </div>
+    <div class="text-center" *ngIf="questions?.length == 0"> No questions</div>
+  </div>
+</mat-menu>
+<mat-menu #emenu="matMenu">
+  <div *ngIf="eLoading" class="text-center"> <mat-icon class="loader-icon">autorenew</mat-icon></div>
+  <div *ngIf="!eLoading">
+    <div *ngFor="let variable of variables">
+      <button mat-menu-item (click)="addEmbeddedDataPipe(variable?.variables)"> {{variable?.variables}}
+      </button>
+    </div>
+    <div class="text-center" *ngIf="variables?.length == 0"> No data</div>
+  </div>
+</mat-menu>

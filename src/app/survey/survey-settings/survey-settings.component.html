@@ -1,0 +1,224 @@
+<!-- <app-sidenav (showNav)="expand($event)"></app-sidenav> 
+<div class="page-wrapper" [ngStyle]="{'padding-left': showNavbar ? '15rem' : '5rem'}">
+
+<app-header></app-header> -->
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <div class="page-header-title">
+                    <h2 class="m-b-10">{{survey_name}}</h2>
+                </div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a [routerLink]="['/survey']">Survey list</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a [routerLink]="['/survey/questions/', id]">
+                            Survey view</a>
+                    </li>
+                    <li class="breadcrumb-item">Survey settings</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-4">
+    <div class="card card-body mt-4">
+        <div class="form-group row mt-4">
+            <div class="col-sm-4">
+                <span class="col-form-label">Survey title</span>
+            </div>
+            <div class="col-sm-8">
+                <mat-form-field style="width: 100%;" appearance="fill">
+                    <mat-label>Survey title</mat-label>
+                    <input matInput type="text" name="survey_title" [(ngModel)]="survey_name" />
+                    <div class="text-danger" *ngIf="!isSurveyname"><span>Survey title cannot be empty.</span></div>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-sm-4">
+                <span class="col-form-label">Duplicate protection</span>
+            </div>
+            <div class="col">
+                <mat-slide-toggle [checked]="isIPCheck ? true : false" [labelPosition]="'after'"
+                    (change)="ipchechChange()" [(ngModel)]="isIPCheck">
+                    <div class="text-secondary"><span>Duplicate protection is done by using IP addresses</span></div>
+                </mat-slide-toggle>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-sm-4">
+                <span class="col-form-label">Start date</span>
+            </div>
+            <div class="col-sm-4">
+                <mat-form-field appearance="fill">
+                    <input matInput [matDatepicker]="picker" [(ngModel)]="selectedStartDate"
+                        placeholder="Choose a start date">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <div class="text-danger" *ngIf="!isStartDate"><span>Survey title cannot be empty.</span></div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-sm-4">
+                <span class="col-form-label">Allow google analytics</span>
+            </div>
+            <div class="col-sm-6">
+                <mat-slide-toggle [checked]="isGAAllowed ? true : false" [labelPosition]="'before'"
+                    [(ngModel)]="isGAAllowed">
+                </mat-slide-toggle>
+            </div>
+        </div>
+        <!-- <div class="row mt-4">
+        <div class="col-sm-4">
+            <label class="col-form-label">End Date</label>
+        </div>
+        <div class="col-sm-6">
+            <mat-form-field>
+                <input matInput [matDatepicker]="picker1" [(ngModel)]="selectedEndDate" placeholder="Choose a end date">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+              </mat-form-field>
+             
+              <div class="text-danger" *ngIf="!isValidEndDate"><span>Please enter a date that is on or after start date.</span></div>
+        </div>
+    </div> -->
+        <div class="row mt-4">
+            <div class="col-sm-4">
+                <span class="col-form-label">Include question number in survey</span>
+            </div>
+            <div class="col-sm-6">
+                <mat-slide-toggle [checked]="settings_data.show_question_number ? true : false"
+                    [labelPosition]="'before'" [(ngModel)]="settings_data.show_question_number">
+                </mat-slide-toggle>
+
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-sm-4">
+                <span class="col-form-label">Include survey title</span>
+            </div>
+            <div class="col-sm-6">
+                <mat-slide-toggle [checked]="settings_data.show_survey_title ? true : false" [labelPosition]="'before'"
+                    [(ngModel)]="settings_data.show_survey_title">
+                </mat-slide-toggle>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-sm-4">
+                <span class="col-form-label">Trigger mail</span>
+            </div>
+            <div class="col-sm-6">
+                <mat-slide-toggle [checked]="settings_data.is_thankyou_mail ? true : false" [labelPosition]="'before'"
+                    [(ngModel)]="settings_data.is_thankyou_mail" (change)="emailConnected()">
+                </mat-slide-toggle>
+            </div>
+        </div>
+        <div *ngIf="settings_data.is_thankyou_mail" class="row">
+            <div class="form-group row mt-4">
+                <div class="col-sm-4">
+                    <span class="col-form-label">From</span>
+                </div>
+                <div class="col-sm-8">
+                    <mat-form-field style="width: 100%;" appearance="fill">
+                        <input matInput type="text" name="survey_title" [(ngModel)]="trigger_email.from_email" />
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="settings_data.is_thankyou_mail && (trigger_email.from_email == null || trigger_email.from_email?.trim() == '') ">Please
+                        enter
+                        from
+                        email</mat-error>
+
+                </div>
+            </div>
+            <div class="form-group row mt-4">
+                <div class="col-sm-4">
+                    <span class="col-form-label">From name</span>
+                </div>
+                <div class="col-sm-8">
+                    <mat-form-field style="width: 100%;" appearance="fill">
+                        <input matInput type="text" name="survey_title" [(ngModel)]="trigger_email.from_name" />
+                    </mat-form-field>
+                    <mat-error *ngIf="settings_data.is_thankyou_mail && trigger_email.from_name?.trim() == ''">Please
+                        enter from
+                        name</mat-error>
+                </div>
+            </div>
+            <div class="form-group row mt-4">
+                <div class="col-sm-4">
+                    <span class="col-form-label">To</span>
+                </div>
+                <div class="col-sm-8">
+                    <mat-form-field style="width: 100%;" appearance="fill">
+                        <input matInput type="text" name="survey_title" [(ngModel)]="trigger_email.to_email" />
+                    </mat-form-field>
+                    <mat-error
+                        *ngIf="settings_data.is_thankyou_mail && (trigger_email.to_email == null || trigger_email.to_email?.trim() == '') ">Please
+                        enter to
+                        email</mat-error>
+                </div>
+            </div>
+            <div class="form-group row mt-4">
+                <div class="col-sm-4">
+                    <span class="col-form-label">To name</span>
+                </div>
+                <div class="col-sm-8">
+                    <mat-form-field style="width: 100%;" appearance="fill">
+                        <input matInput type="text" name="survey_title" [(ngModel)]="trigger_email.to_name" />
+                    </mat-form-field>
+                    <mat-error *ngIf="settings_data.is_thankyou_mail && trigger_email.to_name?.trim() == ''">Please
+                        enter
+                        to
+                        name</mat-error>
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-4 col-form-label text-dark">
+                    <mat-label>Subject</mat-label>
+                </div>
+                <div class="col-sm-8">
+                    <mat-form-field appearance="fill" style="width: 100%;">
+                        <input matInput type="text" name="subject" [(ngModel)]="trigger_email.subject" />
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-4 col-form-label text-dark">
+                    <mat-label>Content</mat-label>
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field appearance="fill" style="width: 100%;">
+                        <textarea matInput type="text" name="content"
+                            [(ngModel)]="trigger_email.thankyou_mail_content"></textarea>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <button mat-fab class="action-button one mat-elevation-z8 me-2" color="basic"
+                        matTooltip="Edit in text editor" (click)="editTextEditor(trigger_email.thankyou_mail_content)">
+                        <i class="material-icons">edit</i>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-4 col-form-label text-dark">
+                    <mat-label>Email plugin</mat-label>
+                </div>
+                <div class="col-sm-2">
+                    <button mat-raised-button color="primary" *ngIf="!isEmailConnected" (click)="connect()">Connect
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-sm-8"></div>
+            <div class="col-sm-4 text-end">
+                <button mat-raised-button color="primary" (click)="save()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- </div> -->

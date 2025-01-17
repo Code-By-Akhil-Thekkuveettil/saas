@@ -1,0 +1,8 @@
+.active {
+  background: #673ab7;
+  color: white;
+}
+.lib_item :hover {
+  background: #673ab7;
+  color: white;
+}

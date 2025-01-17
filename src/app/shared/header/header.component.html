@@ -1,0 +1,37 @@
+<header class="navbar navbar-expand-md navbar-light d-none d-lg-flex d-print-none">
+  <div class="navbar-nav flex-row order-md-last" style="position:absolute; right:0">
+    <div class="nav-item dropdown pointer">
+      <a class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+        <div class="d-flex">
+          <div class="m-1">
+            <p class="m-1 p-0">{{userDetails.orgName}}</p>
+            <p class="m-1 p-0 small">{{userDetails.role}}</p>
+          </div>
+          <span class="avatar avatar-sm m-1"
+            style="background-image: url(/assets/Images/avatar.png); border-radius: 50%;"></span>
+          <div class="m-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-down" width="24"
+              height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M18 15l-6 -6l-6 6h12" transform="rotate(180 12 12)" />
+            </svg>
+          </div>
+        </div>
+      </a>
+      <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+        <a class="dropdown-item" (click)="logOut()">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-logout" width="24" height="24"
+            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" />
+            <path d="M7 12h14l-3 -3m0 6l3 -3" />
+          </svg>
+          Logout
+        </a>
+      </div>
+    </div>
+  </div>
+
+</header>

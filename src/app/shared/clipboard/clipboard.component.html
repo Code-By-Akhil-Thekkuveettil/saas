@@ -1,0 +1,26 @@
+<div style="float: right;">
+    <button matTooltip="Close folter Modal" class="close" mat-button (click)="close()"><mat-icon>close</mat-icon></button>
+</div>
+<div>
+    
+</div>
+
+<div class="row" >
+    <div class="col-11 d-flex">
+      <h1>Copy and share your form</h1>
+       <p *ngIf="cdkCopy" class="m-2 font-weight-normal font-italic" style="background-color: gray;
+        color: white;
+        padding: 2px;
+        border-radius: 5px;">Copied!</p> 
+    </div>
+</div>
+<div mat-dialog-content class="row">
+    <div style="float:right;" class="col-1 pointer">
+        <mat-icon matTooltip="Copy text" [cdkCopyToClipboard]="value" (click)="cdkCopyTxt()" aria-hidden="false" class="material-icons" aria-label="Example content_copy icon">content_copy
+        </mat-icon>
+    </div>
+    <div class="col-11">
+        <input disabled class="mr-1 form-control" [ngClass]="[cdkCopy ? 'copyTxt' : '' ]" id="clipboard-example-textarea" [(ngModel)]="value">
+    </div>
+
+</div>

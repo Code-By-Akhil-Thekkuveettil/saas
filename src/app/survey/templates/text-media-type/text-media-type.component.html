@@ -1,0 +1,29 @@
+<!--  hide response status  -->
+<div class="form-group" *ngIf="question.terminal_status">
+    <label class="rowcol-form-label text-dark">Override response status when
+        this
+        page
+        is reached</label>
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <mat-radio-group class="tp-radio-group col-sm-9 d-flex" style="flex-direction: column;"
+            aria-label="Select an option" [ngModel]="question.response_status_code + '' || '0'" (change)="updateResponseStatusType($event,
+        question)">
+            <mat-radio-button class="tp-radio-button mt-2" value="0">Change
+                response
+                status
+                to
+                'Partial' </mat-radio-button>
+            <mat-radio-button class="tp-radio-button mt-2" value="2">Change
+                response
+                status
+                to
+                'Complete' </mat-radio-button>
+            <mat-radio-button class="tp-radio-button mt-2" value="1">Change
+                response
+                status
+                to
+                'Disqualified' </mat-radio-button>
+        </mat-radio-group>
+    </div>
+</div>

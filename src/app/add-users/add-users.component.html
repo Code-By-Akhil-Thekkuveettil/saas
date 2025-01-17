@@ -1,0 +1,5 @@
+<app-header></app-header>
+<app-sidenav (showNav)="expand($event)" [collapsed]="expNavbar"></app-sidenav>
+<div class="page-wrapper" [ngStyle]="{'padding-left': expNavbar ? '15rem' : '5rem'}">
+    <router-outlet></router-outlet>
+</div>

@@ -1,0 +1,196 @@
+.question-wrapper {
+  width: 70%;
+}
+.tp-radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+  align-items: flex-start;
+}
+.tp-radio-button {
+  margin: 5px;
+}
+.mat-form-field-wrapper {
+  margin-bottom: 0px !important;
+}
+.dt {
+  font-weight: 700 !important;
+}
+.tp-selected-value {
+  margin: 15px 0;
+}
+.mat-checkbox-layout {
+  white-space: normal !important;
+}
+.mat-checkbox-label {
+  white-space: normal !important;
+}
+::ng-deep.mat-checkbox-label {
+  white-space: normal !important;
+}
+.mat-checkbox {
+  font-family: inherit;
+}
+.tp-radio-button .mat-radio-label-content {
+  display: flex;
+  align-items: center;
+}
+.tp-radio-button label.mat-radio-label {
+  width: 100% !important;
+  align-items: normal !important;
+}
+div#surveyattend {
+  height: 100vh !important;
+}
+.content {
+  background: #eceff1 !important;
+}
+.question_text {
+  font-size: 18px;
+}
+.option_text {
+  font-size: 16px;
+}
+.thankyou-message {
+  font-size: 18px;
+}
+.thankyou-message p {
+  font-size: 18px;
+}
+.survey-title {
+  font-size: 25px;
+}
+.error_msg {
+  font-size: 14px;
+}
+.radio_button {
+  cursor: pointer;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  border: 1px solid;
+}
+input[type="radio"] {
+  accent-color: #4586b8;
+}
+.matrixTotal {
+  display: flex;
+  justify-content: center;
+  width: 50%;
+  margin-left: 1rem;
+}
+select {
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0 1rem;
+}
+.mat-form-field-wrapper {
+  margin: 0px !important;
+  padding: 0px !important;
+}
+.close_message {
+  font-size: 20px;
+}
+@media screen and (max-width: 800px) {
+  .question-wrapper {
+    width: 100%;
+  }
+}
+#top-area {
+  background-color: #4586b8;
+}
+#survey_container {
+  box-shadow: 0 0 5px #777;
+}
+#survey_container {
+  background-color: #fff;
+  margin-top: 0px;
+  margin-bottom: 60px;
+  z-index: 9;
+  position: relative;
+}
+header {
+  padding: 15px 0;
+  width: 100%;
+  background: url(/assets/Images/line_header.png) left bottom repeat-x;
+}
+.main-title {
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+  color: #fff;
+  text-align: center;
+}
+.main-title h1 {
+  font-size: 26px;
+  line-height: 40px;
+  margin-top: 15px;
+  color: #000000;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+.main-title p {
+  font-size: 26px;
+  font-weight: 300;
+  margin-top: -5px;
+  color: #fff;
+}
+#top-wizard {
+  padding: 20px 120px;
+  background-color: #f3f3f3;
+  border-bottom: 1px solid #e7e7e7;
+  position: relative;
+  font-size: 11px;
+}
+.ui-progressbar {
+  height: 1em;
+  margin: auto;
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+}
+#middle-wizard {
+  padding: 0px 105px 0px;
+}
+#bottom-wizard {
+  padding: 15px 120px;
+  border-top: 1px solid #e7e7e7;
+  background-color: #f3f3f3;
+}
+.inputType,
+.inputTextEntry {
+  min-height: 50px;
+  background-color: #f1f1f1;
+  border: 1px solid #bcaeae;
+  padding-left: 1rem;
+  font-size: 16px;
+  border-radius: 0px;
+}
+.totalValue {
+  padding-left: 1rem;
+  font-size: 16px;
+}
+.inputTextEntry {
+  width: 98%;
+}
+.radio_choice {
+  padding-left: 2rem;
+  align-content: center;
+}
+.inputTextArea {
+  min-height: 100px;
+  background-color: #f1f1f1;
+  border: none;
+  padding: 1rem !important;
+}
+.required {
+  color: red;
+}
+.required_textentry {
+  color: red;
+  float: inline-end;
+}
+.nextButton {
+  background: #4586b8 !important;
+  color: white;
+}

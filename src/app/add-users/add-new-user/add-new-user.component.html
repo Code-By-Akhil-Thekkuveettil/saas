@@ -1,0 +1,118 @@
+<div class="page-header mb-3">
+  <div class="page-block">
+    <div class="d-flex align-items-center justify-content-between">
+      <h2 class="m-0">Manage users</h2>
+      <button type="button" mat-raised-button color="primary" name="addnewsurvey" (click)="createUser()">Add new
+        users</button>
+    </div>
+  </div>
+</div>
+
+<!-- end page-title -->
+<div class="page-body">
+  <div class="card container">
+    <div class="card-header justify-content-between">
+      <h5 class="card-title">Manage user list</h5>
+      <div class="search">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text line-height-0">
+              <span
+                class="svg-icon"><!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/General/Search.svg--><svg
+                  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                  height="24px" viewBox="0 0 24 24" version="1.1">
+                  <defs></defs>
+                  <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <rect x="0" y="0" width="24" height="24"></rect>
+                    <path
+                      d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z"
+                      fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+                    <path
+                      d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z"
+                      fill="#000000" fill-rule="nonzero"></path>
+                  </g>
+                </svg><!--end::Svg Icon--></span> </span>
+          </div>
+          <input type="text" class="form-control" name="search" [(ngModel)]="searchText" autocomplete="off"
+            placeholder="Recipient's user" aria-describedby="basic-addon2">
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">First name</th>
+              <th scope="col">Last name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Phone number</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let member of membersList | filter:searchText;let i = index">
+              <th scope="row">{{i+1}}</th>
+              <td>
+                <mat-form-field appearance="fill">
+                  <input matInput type="text" name="fname" [(ngModel)]="member.first_name" (change)="update(member)" />
+                  <span class="text-danger" *ngIf="member.firstNameReq == false">Name is required</span>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field appearance="fill">
+                  <input type="text" name="lname" matInput [(ngModel)]="member.last_name" (change)="update(member)" />
+                  <span class="text-danger" *ngIf="member.lastNameReq == false">Name is
+                    required</span>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field appearance="fill">
+                  <mat-label>Email</mat-label>
+                  <input type="email" name="email" [(ngModel)]="member.email" (change)="update(member)" matInput />
+                  <span class="text-danger" *ngIf="member.emailReq == false">Please enter a
+                    valid email id.</span>
+                </mat-form-field>
+              </td>
+              <td>
+                <div class="d-flex">
+                  <mat-form-field appearance="fill" class="w-50">
+                    <mat-select name="countryCode" id="" [(ngModel)]="member.country_code" (change)="update(member)">
+                      <mat-option value="">Select</mat-option>
+                      <mat-option *ngFor="let con of countryList" [value]="con.id">
+                        {{con.code }} {{con.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field appearance="fill" class="ms-2">
+                    <input type="number" name="contact_number" matInput [(ngModel)]="member.contact_number"
+                      (change)="update(member)" />
+                  </mat-form-field>
+                </div>
+                <span class="text-danger" *ngIf="member.phoneReq == false">Please enter a valid phone number.</span>
+              </td>
+              <td class="text-center">
+                <mat-form-field appearance="fill">
+                  <mat-select name="status" id="" [(ngModel)]="member.is_active" (change)="update(member)"
+                    [disabled]="i == 0">
+                    <mat-option class="pe-2" *ngFor="let sts of status" [value]="sts.value">
+                      {{sts.sts }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="text-end mt-4">
+        <button type="button" mat-raised-button color="primary" class="me-2" name="add" (click)="addNewMember()">Add
+          new
+          member</button>
+        <button type="button" mat-raised-button color="primary" class="ml-2" name="save" (click)="save()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

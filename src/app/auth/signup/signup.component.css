@@ -1,0 +1,12 @@
+.signup_type:hover {
+  border: 2px solid blue;
+}
+mat-form-field {
+  width: 100%;
+}
+.font-weight-bold{
+  font-weight: 700 !important;
+}
+.text-left{
+  text-align: left !important;
+}

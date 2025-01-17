@@ -1,0 +1,15 @@
+<!-- <p>submit-form works!</p>
+<button (click)="onPreview()">click</button>
+<div class="modal-body" ngbAutofocus>
+    <div>
+      <div [innerHtml] = "myHtml | safeHtml" class="w-100" style="min-height: 80vh;"></div>
+    </div>
+  </div> -->
+  <!-- <button (click)="submit()">submit</button>  -->
+  <!-- <div class="modal-body" ngbAutofocus>
+    <div> -->
+      <ng-container *ngIf="myHtml">
+        <iframe #iframe  [srcdoc] = "myHtml | safeHtml" class="w-100" style="min-height: 100%;"></iframe>
+      </ng-container>
+    <!-- </div>
+  </div> -->

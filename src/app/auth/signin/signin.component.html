@@ -1,0 +1,136 @@
+<div class="page page-center d-none">
+  <div class="container-tight py-4">
+    <div class="text-center mb-4">
+      <span class="navbar-brand navbar-brand-autodark"><img src="/assets/Images/logo.png" height="45" alt=""></span>
+    </div>
+    <form class="card card-md" [formGroup]="signInForm" action="." method="post" autocomplete="off">
+      <div class="card-body">
+        <h2 class="card-title text-center mb-4">Login to your account</h2>
+        <div class="mb-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Email address</mat-label>
+            <input type="email" formControlName="email" required placeholder="Enter email" matInput>
+            <mat-error class="form-text text-muted"
+              *ngIf="signInForm.controls.email.touched && signInForm.controls.email.errors?.required">
+              <p class="error">Please enter email address.!</p>
+            </mat-error>
+            <mat-error class="form-text text-muted error"
+              *ngIf="signInForm.controls.email.touched && signInForm.controls.email.errors?.email">
+              <p class="error">Email address not well formed.!</p>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="mb-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input [type]="showPassword ? 'text' : 'password'" required formControlName="password" autocomplete="off"
+              matInput>
+            <button mat-icon-button matSuffix (click)="showPassword = !showPassword"
+              [matTooltip]="showPassword ? 'Hide password' : 'Show password'">
+              <mat-icon>{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error class="form-text text-muted"
+              *ngIf="signInForm.controls.password.touched && signInForm.controls.password.errors?.required">
+              <p class="error">Please enter password.!</p>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="mb-2">
+          <span class="pointer">
+            <a (click)="forgotPassword()">I forgot password</a>
+          </span>
+        </div>
+        <div class="mb-2">
+          <mat-checkbox formControlName="rememberMe">Remember me on this device</mat-checkbox>
+        </div>
+        <div class="form-footer">
+          <button class="btn btn-primary btn-block mb-4 w-100" [disabled]="!signInForm.valid" type="submit"
+            (click)="signIn()">Sign up</button>
+        </div>
+
+      </div>
+    </form>
+    <div class="text-center text-muted mt-3">
+      Don't have account yet? <a href="./signUp" tabindex="-1">Sign up</a>
+    </div>
+  </div>
+</div>
+
+<!-- [ auth-signin ] start -->
+<div class="auth-wrapper" id="mainloginpage" style="background-image: url(/assets/Images/login.png); background-attachment: fixed;
+background-size: contain;
+background-position-y: bottom;
+background-repeat: no-repeat;">
+  <div class="auth-content">
+    <div class="card">
+      <div class="row align-items-center text-center">
+        <div class="col-md-12">
+          <div class="card-body">
+            <img src="/assets/Images/logo.png" alt="" class="img-fluid mb-4" width="110">
+            <h4 class="mb-3 f-w-400">Signin</h4>
+            <form class=" card-md" [formGroup]="signInForm" action="." method="post" autocomplete="off">
+              <div class="">
+                <h2 class="card-title text-center mb-4">Login to your account</h2>
+                <div class="mb-4">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Email address</mat-label>
+                    <input type="email" formControlName="email" required placeholder="Enter email" matInput>
+                    <mat-error class="form-text text-muted"
+                      *ngIf="signInForm.controls.email.touched && signInForm.controls.email.errors?.required">
+                      <p class="error mb-0">Please enter email address.!</p>
+                    </mat-error>
+                    <mat-error class="form-text text-muted error"
+                      *ngIf="signInForm.controls.email.touched && signInForm.controls.email.errors?.email">
+                      <p class="error mb-0">Email address not well formed.!</p>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="mb-4">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Password</mat-label>
+                    <input [type]="showPassword ? 'text' : 'password'" required formControlName="password"
+                      autocomplete="off" matInput>
+                    <button mat-icon-button matSuffix (click)="showPassword = !showPassword"
+                      [matTooltip]="showPassword ? 'Hide password' : 'Show password'">
+                      <mat-icon>{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                    <mat-error class="form-text text-muted"
+                      *ngIf="signInForm.controls.password.touched && signInForm.controls.password.errors?.required">
+                      <p class="error mb-0">Please enter password.!</p>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <!-- <div class="mb-2">
+                  <mat-checkbox formControlName="rememberMe">Remember me on this device</mat-checkbox>
+                </div> -->
+                <div class="form-group text-start mt-2">
+                  <div class="form-check">
+                    <input ormControlName="rememberMe" class="form-check-input" type="checkbox" value=""
+                      id="flexCheckChecked" checked>
+                    <label class="form-check-label" for="flexCheckChecked">
+                      Save credentials
+                    </label>
+                  </div>
+                </div>
+                <div class="form-footer">
+                  <button class="btn btn-primary btn-block mb-4 w-100" [disabled]="!signInForm.valid" type="submit"
+                    (click)="signIn()">Sign In</button>
+                  <p class="mb-2 text-muted">Forgot password? <a href="javacript::" (click)="forgotPassword()"
+                      class="f-w-400">Reset</a></p>
+                  <p class="mb-0 text-muted">Don’t have an account? <a href="javacript::" href="./signUp"
+                      class="f-w-400">Sign up</a></p>
+                </div>
+
+              </div>
+            </form>
+
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- [ auth-signin ] end -->

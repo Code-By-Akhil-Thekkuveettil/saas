@@ -1,0 +1,18 @@
+<div class="modal-content text-center no-border">
+    <div class="modal-header d-flex justify-content-center no-border">
+        <i class="fas fa-3x fa-exclamation-circle" style="color: #dc3545;"></i>
+    </div>
+    <div class="modal-body no-border">
+        <h5 class="modal-title" id="exampleModalLabel">
+          <div *ngIf="config && config.title">{{ config.title }}</div>
+        </h5>
+        <span *ngIf="config && config.message">{{ config.message }}</span>
+    </div>
+    <div class="modal-footer d-flex justify-content-center">
+      <button type="button" class="btn btn-danger" *ngIf="config && config.btnCancelText" (click)="decline()">{{ config.btnCancelText }}</button>
+      <button type="button" class="btn btn-outline-danger" data-mdb-dismiss="modal" *ngIf="config && config.btnOkText" (click)="accept()">
+        {{ config.btnOkText }}
+      </button>
+    </div>
+  </div>
+  

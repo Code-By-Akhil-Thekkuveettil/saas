@@ -1,0 +1,20 @@
+<div role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4>Upload the csv in the correct format.</h4>
+      <button type="button" matTooltip="Close" class="btn btn-close" aria-label="Close"
+        (click)="closeDialog()"></button>
+    </div>
+    <div class="modal-body">
+      <div class="mt-4">
+        <input class="form-control" type="file" (change)="onChange($event)">
+        <span class="text-danger text-left" *ngIf="validUpload">Please upload a csv</span>
+        <div class="text-center">
+          <button (click)="onUpload()" mat-raised-button color="primary" class="mt-4">
+            Upload
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

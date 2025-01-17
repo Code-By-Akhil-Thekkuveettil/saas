@@ -1,0 +1,128 @@
+<app-header></app-header>
+<app-sidenav (showNav)="expand($event)" [collapsed]="expNavbar"></app-sidenav>
+<!-- [ Main Content ] start -->
+<div class="page-wrapper" [ngStyle]="{'padding-left': expNavbar ? '15rem' : '5rem'}">
+    <!-- [ breadcrumb ] start -->
+    <div class="page-header">
+        <div class="page-block">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="page-header-title">
+                        <h2 class="m-b-10">Dashboard</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ breadcrumb ] end -->
+    <!-- [ Main Content ] start -->
+    <div class="page-body">
+        <div class="container-xl" style="margin-left: 0 !important">
+            <div class="row">
+                <!-- customer-section start -->
+                <div class="col-xl-6 col-md-12">
+                    <div class="card table-card">
+                        <div class="card-header">
+                            <h5>Active survey responses</h5>
+                        </div>
+                        <div class="pro-scroll" style="height:auto;position:relative;">
+                            <div class="card-body p-0" *ngIf="!nodata">
+                                <div class="table-responsive">
+                                    <table class="table table-hover m-b-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Recent response</th>
+                                                <th>Status</th>
+                                                <th>Last responded on</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let survey of surveys?.last_response_data;">
+                                                <td>{{survey?.survey_name}}</td>
+                                                <td> {{survey?.response_recently_count }}</td>
+                                                <td>
+                                                    <div>
+                                                        <span class="badge bg-light-warning"> {{survey?.status == 1 ?
+                                                            'ACTIVE': 'INACTIVE' }}</span>
+                                                    </div>
+                                                </td>
+                                                <td>{{survey?.last_response_date | date : 'MM/dd/yyyy'}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="card-body" *ngIf="nodata">
+                                <div class="container-xl d-flex flex-column justify-content-center">
+                                    <div class="empty">
+                                        <div class="empty-img"><img
+                                                src="/assets/Images/undraw_printing_invoices_5r4r.svg" height="128"
+                                                alt="">
+                                        </div>
+                                        <p class="empty-title">No responses recently</p>
+                                        <p class="empty-subtitle text-muted">
+                                            Try adjusting your search or filter to find what you're looking for.
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-md-12">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="card prod-p-card background-pattern">
+                                <div class="card-body">
+                                    <div class="row align-items-center m-b-0">
+                                        <div class="col">
+                                            <h6 class="m-b-5">Total survey</h6>
+                                            <h3 class="m-b-0">{{surveys?.total_survey || '-'}}</h3>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="material-icons-two-tone text-primary">poll</i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card prod-p-card bg-primary background-pattern-white">
+                                <div class="card-body">
+                                    <div class="row align-items-center m-b-0">
+                                        <div class="col">
+                                            <h6 class="m-b-5 text-white">Active survey</h6>
+                                            <h3 class="m-b-0 text-white">{{surveys?.total_active_survey || '-'}}</h3>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="material-icons-two-tone text-white">assignment</i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card prod-p-card bg-primary background-pattern-white">
+                                <div class="card-body">
+                                    <div class="row align-items-center m-b-0">
+                                        <div class="col">
+                                            <h6 class="m-b-5 text-white">Total users</h6>
+                                            <h3 class="m-b-0 text-white">{{surveys?.total_user || '-'}}</h3>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="material-icons-two-tone text-white">person</i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- customer-section end -->
+            </div>
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+</div>

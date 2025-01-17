@@ -1,0 +1,170 @@
+<div mat-dialog-title class="d-flex justify-content-between">
+    <h3>Display logic / Validation</h3>
+    <button type="button" class="btn btn-close" aria-label="Close" (click)="closeDialog()"></button>
+</div>
+<div mat-dialog-content>
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
+                type="button" role="tab" aria-controls="nav-home" aria-selected="true">Display logic</button>
+            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
+                type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Validation</button>
+            <button class="nav-link" id="nav-carryforward-tab" data-bs-toggle="tab" data-bs-target="#nav-carryforward"
+                *ngIf="showCarryForward" type="button" role="tab" aria-controls="nav-carryforward"
+                aria-selected="false">Carry forward</button>
+        </div>
+    </nav>
+    <div class="tab-content mb-2 mt-4" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <mat-spinner style="margin: auto;" *ngIf="loading"></mat-spinner>
+            <app-question-display-logic [questions]="questions" [data]="data"
+                *ngIf="!loading"></app-question-display-logic>
+        </div>
+        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div class="row mt-4">
+                <div>
+                    <mat-slide-toggle [checked]="data.required_status ? true : false" [labelPosition]="'before'"
+                        (change)="changeRequired($event)"> Is required?
+                    </mat-slide-toggle>
+                </div>
+            </div>
+            <div class="row mt-2 w-100"
+                *ngIf="data.required_status && question?.custom_validation_message != undefined">
+                <mat-label class="w-50">Validation message</mat-label>
+                <mat-form-field appearance="fill" class="w-50">
+                    <input type="text" name="custom_validation_message" [(ngModel)]="question.custom_validation_message"
+                        matInput />
+                </mat-form-field>
+            </div>
+            <div *ngIf="question_type != 3 &&
+                question_type != 4 && question_type != 8 &&
+                matrix_question_type != 2 &&
+                matrix_question_type != 3 &&
+                question_type != 10">
+                <div class="row mt-2 w-100" *ngIf="question_type != 2">
+                    <mat-label class="w-50">Answer format</mat-label>
+                    <mat-form-field appearance="fill" class="w-50">
+                        <mat-select name="operator" placeholder="Select" [(ngModel)]="validation_field.id"
+                            [disabled]="question_type == 9 || matrix_question_type == 9"
+                            (selectionChange)="answerValidation()">
+                            <mat-option [value]="item.id" *ngFor="let item of answerFormat;let i = index">
+                                {{ item.operator }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div class="date-valid" *ngIf="validation_field?.id == 3">
+                        <div class="row mb-2 mt-2">
+                            <mat-label class="col">Date format</mat-label>
+                            <mat-radio-group class="tp-radio-group" aria-label="Select an option"
+                                [(ngModel)]="validation_field.value">
+                                <mat-radio-button class="tp-radio-button"
+                                    value="MM/DD/YYYY">MM/DD/YYYY</mat-radio-button>
+                                <mat-radio-button class="tp-radio-button"
+                                    value="DD/MM/YYYY">DD/MM/YYYY</mat-radio-button>
+                                <mat-radio-button class="tp-radio-button"
+                                    value="YYYY/MM/DD">YYYY/MM/DD</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                    <div class="regex-valid" *ngIf="validation_field?.id == 6">
+                        <div class="row mb-2 mt-2">
+                            <mat-label class="col">Regex</mat-label>
+                            <mat-form-field appearance="fill" class="w-50">
+                                <input type="text" name="regex" [(ngModel)]="validation_field.value" matInput />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="row mt-2 w-100" *ngFor="let item of validationTypes;let i = index">
+                        <div *ngIf="item.show">
+                            <div class="row mb-2">
+                                <mat-slide-toggle [checked]="item.is_active" [labelPosition]="'before'"
+                                    [(ngModel)]="item.is_active"> {{item.operator}}
+                                </mat-slide-toggle>
+                            </div>
+                            <div *ngIf="item.is_active">
+                                <div class="row mb-2">
+                                    <mat-label class="w-50">Min value</mat-label>
+                                    <mat-form-field appearance="fill" class="w-50">
+                                        <input class="col" name="min" [(ngModel)]="item.min" matInput type="number" />
+                                    </mat-form-field>
+                                </div>
+                                <div class="row mb-2">
+                                    <mat-label class="w-50">Max value</mat-label>
+                                    <mat-form-field appearance="fill" class="w-50">
+                                        <input class="col" name="max" [(ngModel)]="item.max" matInput type="number" />
+                                    </mat-form-field>
+                                </div>
+                                <div class="row mb-2">
+                                    <mat-label class="w-50">Validation message</mat-label>
+                                    <mat-form-field appearance="fill" class="w-50">
+                                        <input type="text" name="custom_validation_message" [(ngModel)]="item.message"
+                                            matInput />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <mat-divider></mat-divider>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div></div>
+            <div class="mt-4 text-end">
+                <button mat-raised-button color="primary" (click)="saveValidationLogic()">Save</button>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-carryforward" role="tabpanel" aria-labelledby="nav-carryforward-tab"
+            *ngIf="showCarryForward">
+            <div *ngIf="carry_forward_questions.length != 0">
+                <mat-card class="mt-1">
+                    <mat-card-content class="card-body">
+                        <div class="">
+                            <h4>Carry forward choices from</h4>
+                            <div class="row col align-content-center">
+                                <div class="col-sm-4 col-lg-5 mr-1">
+                                    <mat-form-field appearance="fill" class="w-full">
+                                        <mat-label>Question</mat-label>
+                                        <mat-select aria-label="Default select example" [(ngModel)]="p_question"
+                                            (selectionChange)="checkPipeValid()">
+                                            <mat-option [value]="item.question_identifier"
+                                                *ngFor="let item of carry_forward_questions;let i = index">{{
+                                                item?.unique_question_num
+                                                }}.
+                                                {{ item?.question }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-2 col-lg-2 mr-1 align-content-center">that are</div>
+                                <div class="col-sm-4 col-lg-4">
+                                    <mat-form-field appearance="fill" class="w-full">
+                                        <mat-label>Condition</mat-label>
+                                        <mat-select aria-label="Default select example" [(ngModel)]="pipeCondition"
+                                            (selectionChange)="checkPipeValid()">
+                                            <mat-option [value]="item"
+                                                *ngFor="let item of conditionList;let i = index">{{item?.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                            </div>
+                        </div>
+                    </mat-card-content>
+                    <mat-card-actions align="end">
+                        <button mat-raised-button color="warn" *ngIf="pipeValid" (click)="updatePiping(0)"
+                            matTooltip="Delete"> Delete </button>
+                        <button mat-raised-button color="primary" (click)="save()" class="ms-2"
+                            [disabled]="!pipeValid">{{this.pipingData?.question_piping_mapping_identifier ? 'Update' :
+                            'Save' }}</button>
+                    </mat-card-actions>
+                </mat-card>
+
+            </div>
+            <div *ngIf="carry_forward_questions.length == 0">
+                No questions to carry forward
+            </div>
+        </div>
+    </div>
+</div>

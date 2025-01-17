@@ -1,0 +1,186 @@
+<div *ngIf="questions.length != 0">
+    <div *ngFor="let sets of groupLogic;let i = index">
+        <div class="row mt-4 mb-4">
+            <div class="row text-center" *ngIf="sets.is_active != 0 && sets?.group_logical_condition_operator != null">
+                <div class="col">
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Group logical operator</mat-label>
+                        <mat-select aria-label="Default select example"
+                            [(ngModel)]="sets.group_logical_condition_operator" (selectionChange)="checkValid(sets)">
+                            <mat-option value="">No operator</mat-option>
+                            <mat-option [value]="'And'">And</mat-option>
+                            <mat-option [value]="'Or'">Or</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div class="d-flex align-items-end"
+                        *ngIf="getActiveGroupsetCount() == 1 && sets.group_logical_condition_operator != ''">
+                        <mat-icon color="warn">warning</mat-icon>
+                        <mat-error> Invalid condition
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex align-items-center justify-content-between groupname" *ngIf="sets.is_active != 0">
+            <h5 class="mr-4 mb-0">Group {{sets?.group_order}} </h5>
+            <button mat-icon-button color="warn" class="ms-2" (click)="deleteGroupDisplayLogic(sets, i)"
+                matTooltip="Delete group"><mat-icon>deleted</mat-icon></button>
+        </div>
+        <mat-card *ngIf="sets.is_active != 0">
+            <mat-card-content class="card-body">
+                <div class="logic" *ngFor="let logic of sets?.question_skip_logical_data;let j = index">
+                    <div class="row mt-4 mb-4 text-right"
+                        *ngIf="logic.is_active != 0 && logic.logical_condition != undefined">
+                        <div class="col-lg-3">
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>Logical operator</mat-label>
+                                <mat-select aria-label="Default select example" [(ngModel)]="logic.logical_condition"
+                                    (selectionChange)="checkLogicValid(logic)">
+                                    <mat-option value="">No operator</mat-option>
+                                    <mat-option value="And">And</mat-option>
+                                    <mat-option value="Or">Or</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="d-flex align-items-end"
+                            *ngIf="getActivesetCount(sets) == 1 && logic.logical_condition != ''">
+                            <mat-icon color="warn">warning</mat-icon>
+                            <mat-error> Invalid condition
+                            </mat-error>
+                        </div>
+                    </div>
+                    <div class="" *ngIf="logic.is_active != 0">
+                        <div [ngClass]="logic?.condition_invalid ? 'condition_invalid' : ''">
+                            <div class="row col align-content-center">
+                                <div class="col-sm-6 col-lg-6 mb-1 mr-1">
+                                    <mat-form-field appearance="outline" class="w-full">
+                                        <mat-label>Question</mat-label>
+                                        <mat-select aria-label="Default select example"
+                                            [(ngModel)]="logic.condition_question_identifier"
+                                            (selectionChange)="updateQuestion(logic)">
+                                            <mat-option [value]="item.question_identifier"
+                                                *ngFor="let item of questions;let i = index">{{
+                                                item.unique_question_num
+                                                }}.
+                                                {{ item.question }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-6 col-lg-6 mb-2 mr-1" *ngIf="logic.question_type == 6 || 
+                                logic.question_type == 5 || 
+                                logic.question_type == 9">
+                                    <!-- matrix starts-->
+                                    <mat-form-field appearance="outline" class="w-full">
+                                        <mat-label>Form question</mat-label>
+                                        <mat-select aria-label="Default select example"
+                                            [(ngModel)]="logic.condition_form_question_identifier"
+                                            (selectionChange)="checkLogicValid(logic)">
+                                            <mat-option [value]="item.form_identifier"
+                                                *ngFor="let item of logic.form_questions;let i = index">{{
+                                                item.choices
+                                                }}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-6 col-lg-6 mb-2 mr-1" *ngIf="logic.question_type == 6 ">
+                                    <!-- matrix starts-->
+                                    <mat-form-field appearance="outline" class="w-full">
+                                        <mat-label>Option</mat-label>
+                                        <mat-select aria-label="Default select example"
+                                            [(ngModel)]="logic.condition_matrix_option_identifier"
+                                            (selectionChange)="checkLogicValid(logic)">
+                                            <mat-option [value]="item.matrix_option_identifier"
+                                                *ngFor="let item of logic.matrix_option;let i = index">{{
+                                                item.matrix_options }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-6 col-lg-6 mb-2 mr-1"
+                                    *ngIf="logic.question_type == 2 || logic.question_type == 3 || logic.question_type == 4 ">
+                                    <mat-form-field appearance="outline" class="w-full">
+                                        <mat-label>Option</mat-label>
+                                        <mat-select aria-label="Default select example"
+                                            [(ngModel)]="logic.condition_question_option_identifier"
+                                            (selectionChange)="checkLogicValid(logic)">
+                                            <mat-option [value]="item.option_identifier"
+                                                *ngFor="let item of logic.options;let i = index">{{
+                                                item.choices }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-6 col-lg-6 mb-2 mr-1">
+                                    <!--  Matrix -->
+                                    <mat-form-field appearance="outline" class="w-full"
+                                        *ngIf="logic.question_type == 6">
+                                        <mat-label>Logic operator</mat-label>
+                                        <mat-select aria-label="Default select example"
+                                            [(ngModel)]="logic.logical_operators_type"
+                                            (selectionChange)="textOperatorUpdate(logic, true)">
+                                            <mat-option [value]="item.id"
+                                                *ngFor="let item of operators[logic.matrix_question_type];let i = index">{{
+                                                item.operator }}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <mat-form-field appearance="outline" class="w-full"
+                                        *ngIf="logic.question_type != 6">
+                                        <mat-label>Logic operator</mat-label>
+                                        <mat-select aria-label="Default select example"
+                                            [(ngModel)]="logic.logical_operators_type"
+                                            (selectionChange)="textOperatorUpdate(logic,true)">
+                                            <mat-option [value]="item.id"
+                                                *ngFor="let item of operators[logic.question_type];let i = index">{{
+                                                item.operator }}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-6 col-lg-6 mb-2 mr-1" *ngIf="logic.textFieldValid">
+                                    <mat-form-field appearance="outline" class="w-full">
+                                        <mat-label>Value</mat-label>
+                                        <input type="text" matInput name="value" [(ngModel)]="logic.field_value"
+                                            (change)="checkLogicValid(logic)" />
+                                    </mat-form-field>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <button mat-button (click)="copyDisplayLogic(sets,logic)" *ngIf="logicValid"
+                                        matTooltip="Copy Logic"><mat-icon>file_copy</mat-icon>Copy logic
+                                    </button>
+                                    <button mat-button color="warn" class="ms-2"
+                                        (click)="deleteDisplayLogic(logic,sets)"
+                                        matTooltip="Delete Logic"><mat-icon>deleted</mat-icon> Delete Logic
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-end" *ngIf="logic?.condition_invalid">
+                            <mat-icon color="warn">warning</mat-icon>
+                            <mat-error> Invalid condition
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+                <div class="col mt-2">
+                    <button mat-button color="primary" (click)="displayLogic(sets)">
+                        <mat-icon>add</mat-icon>Add Logic </button>
+                </div>
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div class="row">
+        <div class="col" *ngIf="groupLogic?.length == 0">
+            <button mat-button color="primary" (click)="displayLogic(null)">
+                <mat-icon>add</mat-icon>Add Logic </button>
+        </div>
+        <div class="col tex-end">
+            <button mat-button color="primary" (click)="displayLogic(null)">
+                <mat-icon>add</mat-icon>Add Group </button>
+        </div>
+    </div>
+    <div class="mt-4 text-end">
+        <button mat-raised-button color="primary" (click)="saveLogic()" [disabled]="!logicValid">Save</button>
+    </div>
+</div>
+<div *ngIf="questions.length == 0" class="m-2"> No display logic</div>

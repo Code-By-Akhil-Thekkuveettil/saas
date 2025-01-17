@@ -1,0 +1,61 @@
+<div class="content-page">
+    <!-- Start content -->
+    <div class="content">
+        <div class="container-fluid">
+            <div class="page-title-box">
+                <div class="row mb-4 mt-4">
+                    <div class="col-sm-10">
+                        <h1 class="page-title text-dark">Subscription</h1>
+                    </div>
+                </div>
+            </div>
+
+            <!-- end page-title -->
+            <div class="">
+                <div class="card">
+                    <div class="card-header d-flex">
+                        <h5 class="card-title col">Invoices</h5>
+                        <div>
+                            <button type="button" mat-raised-button color="primary"
+                                class="btn-icon float-right text-white" (click)="back()" style="margin: 5px;"> <i
+                                    class="fa fa-arrow-left me-2"></i>Back to Subscription</button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="row">
+                            <table class="table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <!-- <th scope="col">Id</th> -->
+                                        <th scope="col">Start date</th>
+                                        <th scope="col">End date</th>
+                                        <th scope="col" class="text-center">View</th>
+                                        <th scope="col" class="text-center">Download</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of subscription">
+                                        <!-- <td>{{item.stripe_latest_invoice_id}}</td> -->
+                                        <td>{{item.period_start | date}}</td>
+                                        <td>{{item.period_end | date}}</td>
+                                        <td class="text-center">
+                                            <a [href]="item.hosted_invoice_url" target="_blank"><i
+                                                    class="fa fa-eye me-2"></i></a>
+                                        </td>
+                                        <td class="text-center">
+                                            <a [href]="item.invoice_pdf"><i class="fa fa-download me-2"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- container-fluid -->
+    </div>
+    <!-- content -->
+</div>

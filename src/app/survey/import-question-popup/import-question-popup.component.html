@@ -1,0 +1,26 @@
+<div mat-dialog-title class="d-flex justify-content-between">
+    <h3>Import Question</h3>
+    <button type="button" class="btn btn-close" aria-label="Close" (click)="closeDialog()"></button>
+</div>
+<div mat-dialog-content>
+    <div class="card mb-2 d-flex justify-content-center" *ngIf="listview">
+        <div class="list-sample">
+            <mat-list>
+                <mat-list-item *ngFor="let lib_question of listview" style="cursor: pointer;" class="lib_item"
+                    [ngClass]="lib_question?.id == selectedItem ? 'active' : ''" (click)="selectType(lib_question?.id)">
+                    <h4 mat-line [ngClass]="lib_question?.id == selectedItem ? 'active' : ''">
+                        {{lib_question?.name}}</h4>
+                    <p mat-line>{{lib_question?.question}}</p>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+            </mat-list>
+        </div>
+    </div>
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-raised-button (click)="closeDialog()">
+        Cancel
+    </button>
+    <button cdkFocusInitial type="submit" mat-raised-button color="primary" data-bs-toggle="modal"
+        [disabled]="selectedItem == ''" (click)="selectQuestion()">Create</button>
+</div>

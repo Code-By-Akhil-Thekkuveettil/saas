@@ -1,0 +1,27 @@
+<form class="card card-md" [formGroup]="gaForm" action="." method="post" autocomplete="off" (ngSubmit)="add()">
+    <div class="row">
+        <div class="col-sm-4">
+            <label for=""><b>Google analytics</b></label>
+        </div>
+        <div class="col-sm-4">
+            <input type="password" name="key" class="form-control" formControlName="key" placeholder="UA-XXXXXXX-Y" />
+            <small class="form-text text-muted"
+                *ngIf="gaForm.controls.key.touched && gaForm.controls.key.errors?.required">
+                <p class="error">Please enter key.</p>
+            </small>
+        </div>
+        <div class="col-sm-4">
+            <input type="password" name="domain" class="form-control" formControlName="domain"
+                placeholder="domain.com" />
+            <small class="form-text text-muted"
+                *ngIf="gaForm.controls.domain.touched && gaForm.controls.domain.errors?.required">
+                <p class="error">Please enter domain.</p>
+            </small>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="text-end">
+            <button type="submit" name="add" mat-raised-button color="primary" [disabled]="!gaForm.valid">Add</button>
+        </div>
+    </div>
+</form>
