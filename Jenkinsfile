@@ -47,8 +47,8 @@ pipeline {
                     git clone ${REPO_URL} repo
                     cd repo
                     sed -i 's|image: .*|image: ${REGISTRY}/${IMAGE_NAME}:${VERSION}|' ${DEPLOYMENT_FILE_PATH}
-                    git config user.name "Jenkins CI"
-                    git config user.email "jenkins@example.com"
+       #             git config user.name "Jenkins CI"
+       #            git config user.email "jenkins@example.com"
                     git add ${DEPLOYMENT_FILE_PATH}
                     git commit -m "Update image to ${REGISTRY}/${IMAGE_NAME}:${VERSION}"
                     git push origin main
