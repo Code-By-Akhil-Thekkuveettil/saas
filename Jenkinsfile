@@ -28,10 +28,10 @@ pipeline {
             steps {
                 script {
                     // Login to the Docker registry (assuming credentialsId is set in Jenkins)
-                    withDockerRegistry([credentialsId: 'docker-credentials', url: "https://${REGISTRY}"]) {
+                        sh docker login docker.io -u akhiltofficial -p Kolathara10@
                         // Push Docker image
                         sh "docker push ${REGISTRY}/${IMAGE_NAME}:${VERSION}"
-                    }
+                    
                 }
             }
         }
