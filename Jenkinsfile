@@ -48,6 +48,8 @@ pipeline {
                         rm -rf repo
                         git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@${REPO_URL} repo
                         cd repo
+                        git config --global user.email "akhiltofficial@gmail.com"
+                        git config --global user.name "akhiltofficial"
                         sed -i 's|image: .*|image: ${REGISTRY}/${IMAGE_NAME}:${VERSION}|' ${DEPLOYMENT_FILE_PATH}
                         git add ${DEPLOYMENT_FILE_PATH}
                         git commit -m "Update image to ${REGISTRY}/${IMAGE_NAME}:${VERSION}"
