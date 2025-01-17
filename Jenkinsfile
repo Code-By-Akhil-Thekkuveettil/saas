@@ -45,6 +45,7 @@ pipeline {
                     script {
                         // Update the Deployment YAML with the new image and push changes to Git
                         sh """
+                        rm -rf repo
                         git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@${REPO_URL} repo
                         cd repo
                         sed -i 's|image: .*|image: ${REGISTRY}/${IMAGE_NAME}:${VERSION}|' ${DEPLOYMENT_FILE_PATH}
