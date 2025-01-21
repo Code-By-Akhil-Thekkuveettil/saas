@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent agent1
 
     environment {
         REGISTRY = 'docker.io' // Docker registry, e.g., docker.io
