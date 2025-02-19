@@ -30,7 +30,6 @@ jobs:
       - name: Update deployment.yml with new image tag
           
         run: |
-          rm -rf *
           git clone https://${{ secrets.GIT_USERNAME }}:${{ secrets.GIT_PASSWORD }}@{{ secrets.REPO_URL }} repo
           cd repo
           git config --global user.name "github-actions"
