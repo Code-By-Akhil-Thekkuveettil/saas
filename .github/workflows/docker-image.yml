@@ -21,8 +21,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/saas:${{ env.BUILD_NUMBER }} .
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/saas:test123
 
       - name: Push Docker image to Docker Hub
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/saas:${{ env.BUILD_NUMBER }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/saas:test123
