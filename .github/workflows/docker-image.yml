@@ -14,5 +14,4 @@ jobs:
       - name: Update deployment.yml with new image tag
           
         run: |
-          git clone https://${{ secrets.GIT_USERNAME }}:${{ secrets.GIT_PASSWORD }}@{{ secrets.REPO_URL }}
-          
+          git clone https://${{ secrets.GIT_USERNAME }}:${{ secrets.GIT_PASSWORD }}@{{ secrets.REPO_URL }} repo
