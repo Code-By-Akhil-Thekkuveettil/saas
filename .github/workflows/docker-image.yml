@@ -15,6 +15,7 @@ jobs:
           
         run: |
           git clone https://Code-By-Akhil-Thekkuveettil:${{ secrets.GIT_PASSWORD }}@github.com/Code-By-Akhil-Thekkuveettil/practice.git repo 
+          cd repo
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           sed -i 's|image: .*|image: ${{ secrets.DOCKERHUB_USERNAME }}/saas:${{github.sha}}|' {{ secrets.FILE_PATH}}
