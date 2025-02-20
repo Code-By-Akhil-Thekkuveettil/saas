@@ -25,7 +25,7 @@ jobs:
           
       - name: Update JSON file using jq
         run: |
-          jq '.image=env.IMAGE' src/asset/config/config.json > tmp.json && mv tmp.json src/asset/config/config.json
+          jq '.image=env.IMAGE' src/assets/config/config.json > tmp.json && mv tmp.json src/assets/config/config.json
       - name: Build Docker image
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/saas:${{github.sha}} .
