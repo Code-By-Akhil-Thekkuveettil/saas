@@ -18,7 +18,7 @@ jobs:
           cd repo
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          sed -i 's|image: .*|image: ${{ secrets.DOCKERHUB_USERNAME }}/saas:${{github.sha}}|' {{ secrets.FILE_PATH}}
-          git add ${DEPLOYMENT_FILE_PATH}
+          sed -i 's|image: .*|image: ${{ secrets.DOCKERHUB_USERNAME }}/saas:${{github.sha}}|' kubernetes/minikube/Deployment.yml
+          git add kubernetes/minikube/Deployment.yml
           git commit -m "Update image tag to ${{ env.COMMIT_SHA }}"
           git push https://${{ secrets.GIT_USERNAME }}:${{ secrets.GIT_PASSWORD }}@{{ secrets.REPO_URL }} main
