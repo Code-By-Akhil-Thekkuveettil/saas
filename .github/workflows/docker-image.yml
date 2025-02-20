@@ -26,6 +26,12 @@ jobs:
       - name: Update JSON file using jq
         run: |
           jq '.image=env.IMAGE' src/assets/config/config.json > tmp.json && mv tmp.json src/assets/config/config.json
+      
+      - name: Update JSON file using sed
+        run: |
+          sed -i 's|"image": *"[^"]*"|"image": "'"$IMAGE"'"|' src/assets/config/test.json
+
+
       - name: Build Docker image
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/saas:${{github.sha}} .
