@@ -18,7 +18,14 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
+      
+      - name: Set Environment Variables
+        run: |
+          echo "IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/saas:${{ github.sha }}" >> $GITHUB_ENV
+          
+      - name: Update JSON file using jq
+        run: |
+          jq '.image=env.IMAGE' config.json > tmp.json && mv tmp.json config.json
       - name: Build Docker image
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/saas:${{github.sha}} .
