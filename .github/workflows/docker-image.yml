@@ -21,4 +21,4 @@ jobs:
           sed -i 's|image: .*|image: ${{ secrets.DOCKERHUB_USERNAME }}/saas:${{github.sha}}|' kubernetes/minikube/Deployment.yml
           git add kubernetes/minikube/Deployment.yml
           git commit -m "Update image tag to ${{ env.COMMIT_SHA }}"
-          git push https://${{ secrets.GIT_USERNAME }}:${{ secrets.GIT_PASSWORD }}@{{ secrets.REPO_URL }} main
+          git push https://Code-By-Akhil-Thekkuveettil:${{ secrets.GIT_PASSWORD }}@github.com/Code-By-Akhil-Thekkuveettil/practice.git main
