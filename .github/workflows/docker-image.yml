@@ -26,7 +26,8 @@ jobs:
       - name: Push Docker image to Docker Hub
         run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/saas:${{github.sha}}
-
+    steps:
+    
       - name: Update deployment.yml with new image tag
           
         run: |
