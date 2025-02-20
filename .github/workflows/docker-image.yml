@@ -14,4 +14,4 @@ jobs:
       - name: Update deployment.yml with new image tag
           
         run: |
-          git clone https://x-access-token:${{ secrets.GIT_PASSWORD }}@{{ secrets.REPO_URL }} repo
+          git clone https://Code-By-Akhil-Thekkuveettil:${{ secrets.GIT_PASSWORD }}@github.com/Code-By-Akhil-Thekkuveettil/practice.git repo 
