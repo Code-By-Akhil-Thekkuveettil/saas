@@ -1,1 +1,109 @@
-replcae
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake and Ladder (2 Player)</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; background-color: #222; color: white; }
+        .board { display: grid; grid-template-columns: repeat(10, 50px); gap: 2px; margin: 20px auto; width: 520px; border: 2px solid white; position: relative; }
+        .cell { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border: 1px solid white; background-color: #444; color: white; font-weight: bold; position: relative; }
+        .player { width: 15px; height: 15px; border-radius: 50%; position: absolute; }
+        .player1 { background-color: red; }
+        .player2 { background-color: blue; }
+        .snake { background-color: red; width: 5px; position: absolute; transform: rotate(45deg); }
+        .ladder { background-color: lime; width: 5px; position: absolute; transform: rotate(-45deg); }
+        button { padding: 10px 20px; font-size: 18px; margin-top: 20px; background: lime; border: none; cursor: pointer; }
+        #turn { margin-top: 10px; font-size: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Snake and Ladder (2 Player)</h1>
+    <div class="board" id="board"></div>
+    <p>Roll: <span id="dice">🎲</span></p>
+    <p id="turn">Player 1's Turn (Red 🟥)</p>
+    <button onclick="rollDice()">Roll Dice</button>
+
+    <script>
+        const board = document.getElementById("board");
+        const diceEl = document.getElementById("dice");
+        const turnEl = document.getElementById("turn");
+
+        let players = [{ pos: 1, color: "player1" }, { pos: 1, color: "player2" }];
+        let currentPlayer = 0;
+        let snakes = { 16: 6, 47: 26, 49: 11, 56: 53, 62: 19, 64: 60, 87: 24, 93: 73, 95: 75, 98: 78 };
+        let ladders = { 3: 22, 8: 30, 28: 84, 58: 77, 75: 86, 80: 99, 90: 91 };
+
+        function createBoard() {
+            for (let i = 100; i >= 1; i--) {
+                let cell = document.createElement("div");
+                cell.className = "cell";
+                cell.innerText = i;
+                cell.id = "cell-" + i;
+                board.appendChild(cell);
+            }
+            drawSnakesAndLadders();
+            updatePlayers();
+        }
+
+        function drawSnakesAndLadders() {
+            for (let start in ladders) {
+                drawLine(start, ladders[start], "ladder");
+            }
+            for (let start in snakes) {
+                drawLine(start, snakes[start], "snake");
+            }
+        }
+
+        function drawLine(start, end, type) {
+            let startCell = document.getElementById(`cell-${start}`);
+            let endCell = document.getElementById(`cell-${end}`);
+            if (!startCell || !endCell) return;
+
+            let line = document.createElement("div");
+            line.className = type;
+            line.style.height = Math.abs(startCell.offsetTop - endCell.offsetTop) + "px";
+            line.style.left = (startCell.offsetLeft + 25) + "px";
+            line.style.top = Math.min(startCell.offsetTop, endCell.offsetTop) + "px";
+            board.appendChild(line);
+        }
+
+        function updatePlayers() {
+            document.querySelectorAll(".player").forEach(p => p.remove());
+            players.forEach(player => {
+                let piece = document.createElement("div");
+                piece.className = "player " + player.color;
+                document.getElementById("cell-" + player.pos).appendChild(piece);
+            });
+        }
+
+        function rollDice() {
+            let dice = Math.floor(Math.random() * 6) + 1;
+            diceEl.innerText = `🎲 ${dice}`;
+            movePlayer(dice);
+        }
+
+        function movePlayer(steps) {
+            let player = players[currentPlayer];
+            let newPos = player.pos + steps;
+            if (newPos > 100) return;
+
+            player.pos = newPos;
+            if (ladders[player.pos]) { player.pos = ladders[player.pos]; alert("Ladder! 🪜"); }
+            if (snakes[player.pos]) { player.pos = snakes[player.pos]; alert("Snake! 🐍"); }
+
+            updatePlayers();
+
+            if (player.pos === 100) {
+                setTimeout(() => alert(`Player ${currentPlayer + 1} Wins! 🎉`), 100);
+                return;
+            }
+
+            currentPlayer = 1 - currentPlayer;
+            turnEl.innerText = `Player ${currentPlayer + 1}'s Turn (${currentPlayer === 0 ? 'Red 🟥' : 'Blue 🟦'})`;
+        }
+
+        createBoard();
+    </script>
+</body>
+</html>
